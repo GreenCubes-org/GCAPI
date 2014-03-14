@@ -65,11 +65,10 @@ module.exports = {
 		var username =  req.user.username;
 		var obj = {
 			username: req.user.username,
-			id: req.user.id,
 			lastseen: null,
 			reg_date: null,
 			prefix: null,
-			color: null,
+			nick_color: null,
 			skin_url: 'http://greenusercontent.net/mc/skins/' + username + '.png'
 		};
 
@@ -94,7 +93,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						obj.prefix = result[0].prefix;
-						obj.color = result[0].color;
+						obj.nick_color = result[0].color;
 
 						callback(null, obj);
 					}
@@ -113,7 +112,6 @@ module.exports = {
 		var username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
 		var obj = {
 			username: username,
-			id: null,
 			lastseen: null,
 			reg_date: null,
 			prefix: null,
@@ -154,7 +152,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						obj.prefix = result[0].prefix;
-						obj.color = result[0].color;
+						obj.nick_color = result[0].color;
 
 						callback(null, obj);
 					}

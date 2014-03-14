@@ -27,15 +27,26 @@ module.exports = {
 			req.logIn(user, function (err) {
 				if (err) throw err;
 
+				console.log(req.session.returnTo);
 				if (req.session.returnTo) res.redirect(req.session.returnTo)
-					else {res.redirect('/');};
+					else res.redirect('/');
 			});
 		})(req, res);
 	},
 
 	logout: function (req, res) {
-		req.logout();
-		res.redirect('/');
+		if (req.user) {
+			req.logout();
+			res.json({
+				code: '200',
+				message: 'Success'
+			});
+		} else {
+			res.json({
+				code: '203',
+				message: 'You\'re not logged on'
+			});
+		}
 	},
 
 };

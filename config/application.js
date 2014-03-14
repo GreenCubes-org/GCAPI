@@ -62,7 +62,45 @@ module.exports = {
 			}));
 
 
-			app.get('/oauth/authorize', login.ensureLoggedIn(), server.authorize(function (clientID, redirectURI, done) {
+			app.get('/oauth/authorize', function (req, res, done) {
+				if (!req.query.client_id) {
+					res.json({
+						error: "client_id is not defined"
+					});
+					res.end();
+					return done(null, false);
+				}
+				if (!req.query.redirect_uri) {
+					res.json({
+						error: "redirect_uri is not defined"
+					});
+					res.end();
+					return done(null, false);
+				}
+				if (!req.query.response_type || req.query.response_type !== 'code') {
+					res.json({
+						error: "wrong response_type"
+					});
+					res.end();
+					return done(null, false);
+				}
+				if (!req.isAuthenticated()) {
+					Client.findOne({
+						id: parseInt(req.query.client_id)
+					}, function (err, cli) {
+						if (err) return done(err);
+
+						res.render('OAuthLogin', {
+							layout: 'layout',
+							name: cli.name,
+							description: cli.text
+						});
+
+						return done(null, false);
+					});
+				}
+			},
+			server.authorize(function (clientID, redirectURI, done) {
 				Client.findOne({
 					id: clientID
 				}, function (err, cli) {
@@ -78,7 +116,8 @@ module.exports = {
 					}
 					return done(null, cli, cli.redirectURI);
 				});
-			}), function (req, res) {
+			}),
+			function (req, res) {
 				res.render('dialog', {
 					transactionID: req.oauth2.transactionID,
 					user: req.user,

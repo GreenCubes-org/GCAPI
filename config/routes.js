@@ -19,21 +19,25 @@ module.exports.routes = {
 	'get /login': 'auth.loginTpl',
 	'/logout': 'auth.logout',
 
+	/*
 	// Debug stuff
 	'/dev/res': 'dev.res',
 	'/dev/req': 'dev.req',
 	'/dev/session': 'dev.session',
 	'/dev/user': 'dev.user',
+	*/
 
-	// User API
-	'/users/': 'user.index',
-	'/users/:user': 'user.user',
-	'/user': 'user.current',
+	// GC.Main User API
+	'/main/users/': 'user.index',
+	'/main/users/:user': 'user.user',
+	'/main/user': 'user.current',
 
+	/*
 	// Server info API
 	'/servers': 'server.index',
 	'/servers/main': 'server.main',
 	'/servers/rpg': 'server.rpg',
 	'/servers/apocalyptic': 'server.apocalyptic'
+	*/
 
 };

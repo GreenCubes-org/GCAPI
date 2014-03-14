@@ -107,6 +107,51 @@ a:hover, a:active {
 	border: none;
 }
 
+.enterbutton:hover {
+	background: url('/images/blue_press.png') no-repeat scroll 0 0 transparent;
+}
+
+.enterbutton:active {
+	background: url('/images/blue_pressed.png') no-repeat scroll 0 0 transparent;
+}
+
+
+.allowbutton {
+	background: url('/images/green_normal.png') no-repeat scroll 0 0 transparent;
+	color: #000000;
+	cursor: pointer;
+	height: 42px;
+	padding-bottom: 2px;
+	width: 222px;
+	border: none;
+}
+
+.allowbutton:hover {
+	background: url('/images/green_press.png') no-repeat scroll 0 0 transparent;
+}
+
+.allowbutton:active {
+	background: url('/images/green_pressed.png') no-repeat scroll 0 0 transparent;
+}
+
+.cancelbutton {
+	background: url('/images/red_normal.png') no-repeat scroll 0 0 transparent;
+	color: #000000;
+	cursor: pointer;
+	height: 38px;
+	padding-bottom: 2px;
+	width: 203px;
+	border: none;
+}
+
+.cancelbutton:hover {
+	background: url('/images/red_press.png') no-repeat scroll 0 0 transparent;
+}
+
+.cancelbutton:active {
+	background: url('/images/red_pressed.png') no-repeat scroll 0 0 transparent;
+}
+
 .wtflink {
 	font-size: 13px;
 }
