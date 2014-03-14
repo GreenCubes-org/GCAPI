@@ -16,7 +16,8 @@
     "passport-http": "~0.2.2",
     "passport-oauth2-client-password": "~0.1.1",
     "passport-local": "~0.1.6",
-    "sails-memory": "~0.9.1"
+    "sails-memory": "~0.9.1",
+    "mysql": "2.0.0-alpha9"
   },
   "scripts": {
     "start": "node app.js",
