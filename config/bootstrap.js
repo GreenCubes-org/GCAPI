@@ -12,21 +12,6 @@ module.exports.bootstrap = function (cb) {
 
   // It's very important to trigger this callack method when you are finished 
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  Client.create({
-  	name: 'testClient',
-  	clientSecret: '123test',
-  	redirectURI: 'http://127.0.0.1:1337/testCallback',
-  	text: 'just a test client'
-  }).done(function(err,client){
-  	console.log("Created test client: "+client.name);
-  });
 
-  User.create({
-  	name: 'testUser',
-  	password: 'password',
-  	email: 'test@example.com'
-  }).done(function(err,user){
-  	console.log("Created test user: "+user.name);
-  });
   cb();
 };

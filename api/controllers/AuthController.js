@@ -2,44 +2,40 @@
  * AuthController
  *
  * @module		:: Controller
- * @description	:: Contains logic for handling auth requests.
+ * @description	:: Authorization controllers.
  */
 
-var passport = require('passport');
+var passport = require('passport'),
+	login = require('connect-ensure-login');
 
 module.exports = {
 
-	process: function(req,res){
-		passport.authenticate(
-		    'local',
-		    function(err, user, info)
-		    {
-		        if ((err) || (!user))
-		        {
-		            res.redirect('/login');
-		            return;
-		        }
-		        // use passport to log in the user using a local method
-		        req.logIn(
-		            user,
-		            function(err)
-		            {
-		                if (err)
-		                {
-		                    res.redirect('/login');
-		                    return;
-		                }
-		                res.redirect('/');
-		                return;
-		            }
-		        );
-		    }
-		)(req, res);
+	logintpl: function (req, res) {
+		if (req.isAuthenticated()) return res.redirect('/');
+
+		res.view('login');
 	},
 
-	logout: function(req,res){
+	login: function (req, res) {
+		passport.authenticate('local', function (err, user, info) {
+			if ((err) || (!user)) {
+				if (info.message === 'Missing credentials') info.message = 'Введите логин/пароль';
+				return res.json({
+					error: info
+				});
+			}
+			req.logIn(user, function (err) {
+				if (err) throw err;
+
+				if (req.session.returnTo) res.redirect(req.session.returnTo)
+					else {res.redirect('/');};
+			});
+		})(req, res);
+	},
+
+	logout: function (req, res) {
 		req.logout();
 		res.redirect('/');
-	}
- 
+	},
+
 };

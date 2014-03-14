@@ -9,23 +9,10 @@
 
 module.exports[404] = function pageNotFound(req, res, express404Handler) {
 
-  var statusCode = 404;
-  var result = {
-    status: statusCode
-  };
+	var result = {
+		status: 404
+	};
 
-  // If the user-agent wants a JSON response, send json
-  if (req.wantsJSON) {
-    return res.json(result, result.statusCode);
-  }
-
-  // Otherwise, serve the `views/404.*` page
-  var view = '404';
-  res.render(view, result, function (err) {
-    if (err) {
-      return express404Handler();
-    }
-    res.render(view);
-  });
+	res.status(404).json(result);
 
 };

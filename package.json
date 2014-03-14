@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "oAuth 2 provider exmaple in sailsjs",
   "dependencies": {
-    "sails": "0.9.3",
+    "sails": "0.9.8",
     "grunt": "0.4.1",
     "sails-disk": "~0.9.0",
     "ejs": "0.8.4",
