@@ -66,5 +66,14 @@ module.exports = {
 		password: '',
 		database: '',
 		socketPath: ''
+	},
+	redis: {//Redis DB
+		host: 'localhost',
+		port: 6379,
+		ttl: 129600, // = 1.5 days
+		db: {//change this if other db
+			session: 0
+		}, 
+		pass:'<redis auth password>'
 	}
 };
