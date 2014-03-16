@@ -1,8 +1,8 @@
 {
-  "name": "sails-oauth-provider",
+  "name": "GC.API",
   "private": true,
-  "version": "1.0.0",
-  "description": "oAuth 2 provider exmaple in sailsjs",
+  "version": "0.1.0",
+  "description": "GreenCubes API",
   "dependencies": {
     "sails": "0.9.8",
     "grunt": "0.4.1",
@@ -10,12 +10,12 @@
     "ejs": "0.8.4",
     "optimist": "0.3.4",
     "oauth2orize": "~0.1.0",
-    "passport": "~0.1.17",
+    "passport": "~0.2.0",
     "connect-ensure-login": "~0.1.1",
     "passport-http-bearer": "~1.0.1",
     "passport-http": "~0.2.2",
     "passport-oauth2-client-password": "~0.1.1",
-    "passport-local": "~0.1.6",
+    "passport-local": "~1.0.0",
     "mysql": "2.0.0-alpha9",
 	"sails-mysql": "~0.9.0"
   },
@@ -25,6 +25,6 @@
   },
   "main": "app.js",
   "repository": "",
-  "author": "",
+  "author": "Kern0",
   "license": ""
 }

@@ -65,24 +65,24 @@ module.exports = {
 			app.get('/oauth/authorize', function (req, res, done) {
 				if (!req.query.client_id) {
 					res.json({
-						error: "client_id is not defined"
+						error: "client_id is not defined",
+						documentation_url: sails.docs_url
 					});
-					res.end();
-					return done(null, false);
+					return;
 				}
 				if (!req.query.redirect_uri) {
 					res.json({
-						error: "redirect_uri is not defined"
+						error: "redirect_uri is not defined",
+						documentation_url: sails.docs_url
 					});
-					res.end();
-					return done(null, false);
+					return;
 				}
 				if (!req.query.response_type || req.query.response_type !== 'code') {
 					res.json({
-						error: "wrong response_type"
+						error: "wrong response_type",
+						documentation_url: sails.docs_url
 					});
-					res.end();
-					return done(null, false);
+					return;
 				}
 				if (!req.isAuthenticated()) {
 					Client.findOne({
@@ -95,10 +95,10 @@ module.exports = {
 							name: cli.name,
 							description: cli.text
 						});
-
-						return done(null, false);
 					});
+					return;
 				}
+				done();
 			},
 			server.authorize(function (clientID, redirectURI, done) {
 				Client.findOne({

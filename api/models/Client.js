@@ -8,28 +8,33 @@
 
 module.exports = {
 
-  attributes: {
-  	
-  	name: {
-  		type: 'STRING',
-  		required: true
-  	},
+	attributes: {
 
-  	clientSecret: {
-  		type: 'STRING',
-  		required: true
-  	},
+		name: {
+			type: 'STRING',
+			required: true
+		},
 
-  	redirectURI: {
-  		type: 'STRING',
-  		required: true
-  	},
+		clientSecret: {
+			type: 'STRING',
+			required: true
+		},
 
-  	text: {
-  		type: 'STRING',
-  		required: true
-  	}
-    
-  }
+		redirectURI: {
+			type: 'STRING',
+			required: true
+		},
+
+		failRedirectURI: {
+			type: 'STRING',
+			required: true
+		},
+
+		text: {
+			type: 'STRING',
+			required: true
+		}
+
+	}
 
 };

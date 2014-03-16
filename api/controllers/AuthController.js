@@ -21,15 +21,17 @@ module.exports = {
 			if ((err) || (!user)) {
 				if (info.message === 'Missing credentials') info.message = 'Введите логин/пароль';
 				return res.json({
-					error: info
+					message: info,
+					documentation_url: sails.docs_url
 				});
 			}
 			req.logIn(user, function (err) {
 				if (err) throw err;
 
-				console.log(req.session.returnTo);
-				if (req.session.returnTo) res.redirect(req.session.returnTo)
-					else res.redirect('/');
+				res.json({
+					message: 'Success',
+					documentation_url: sails.docs_url
+				});
 			});
 		})(req, res);
 	},
@@ -38,15 +40,47 @@ module.exports = {
 		if (req.user) {
 			req.logout();
 			res.json({
-				code: '200',
-				message: 'Success'
+				message: 'Success',
+				documentation_url: sails.docs_url
 			});
 		} else {
 			res.json({
-				code: '203',
-				message: 'You\'re not logged on'
+				message: 'You\'re not logged on',
+				documentation_url: sails.docs_url
 			});
 		}
 	},
+
+	deny: function (req, res) {
+		if (!req.query.client_id) {
+			res.json({
+				message: "client_id is not defined",
+				documentation_url: sails.docs_url
+			});
+			return;
+		}
+		if (!req.query.redirect_uri) {
+			res.json({
+				message: "redirect_uri is not defined",
+				documentation_url: sails.docs_url
+			});
+			return;
+		}
+		if (!req.query.response_type || req.query.response_type !== 'code') {
+			res.json({
+				message: "Wrong response_type",
+				documentation_url: sails.docs_url
+			});
+			return;
+		}
+		Client.findOne({
+			id: parseInt(req.query.client_id),
+			redirectURI: req.query.redirect_uri
+		}, function (err, cli) {
+			if (err) return done(err);
+
+			res.redirect(failRedirectURI);
+		});
+	}
 
 };

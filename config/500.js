@@ -1,7 +1,5 @@
 /**
- * Default error handler
- *
- * If an error is thrown, Sails will respond using this default error handler
+ * 500.
  *
  * For more information on error handling in Sails/Express, check out:
  * http://expressjs.com/guide.html#error-handling
@@ -14,7 +12,8 @@ module.exports[500] = function serverErrorOccurred(errors, req, res, expressErro
 
 	// Build data for response
 	var response = {
-		status: 500
+		message: 'Internal Server Error',
+		documentation_url: sails.docs_url
 	};
 
 	// Ensure that each error is formatted correctly

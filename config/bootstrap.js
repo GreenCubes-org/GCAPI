@@ -7,11 +7,10 @@
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#documentation
  */
+var local = require('./local.js');
 
 module.exports.bootstrap = function (cb) {
+	sails.docs_url = local.docs_url || 'https://wiki.greencubes.org/API';
 
-  // It's very important to trigger this callack method when you are finished 
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-
-  cb();
+	cb();
 };

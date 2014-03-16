@@ -11,26 +11,30 @@
 
 module.exports.routes = {
 
-	// Information about API
-	'/': 'service.info',
+	/* Index */
+	'/': 'home.index',
 
-	// Basic login stuff
+	/* Web-API API (lolwhat) */
+	'/api/info': 'api.info',
+
+	/* OAuth client login */
 	'post /login': 'auth.login',
 	'get /login': 'auth.loginTpl',
 	'/logout': 'auth.logout',
 
-	/*
-	// Debug stuff
-	'/dev/res': 'dev.res',
-	'/dev/req': 'dev.req',
-	'/dev/session': 'dev.session',
-	'/dev/user': 'dev.user',
-	*/
+	/* User API */
+	'/users/:user': 'user.user',
+	'/user': 'user.current',
 
-	// GC.Main User API
-	'/main/users/': 'user.index',
-	'/main/users/:user': 'user.user',
-	'/main/user': 'user.current',
+	/* GC.Main section */
+	'/main/status': 'main.status',
+	'/main/economy': 'main.economy',
+
+	/* GC.RPG section */
+	'/rpg/status': 'rpg.status',
+
+	/* GC.Apocalyptic section */
+	'/apocalyptic/status': 'apocalyptic.status'
 
 	/*
 	// Server info API
@@ -38,6 +42,14 @@ module.exports.routes = {
 	'/servers/main': 'server.main',
 	'/servers/rpg': 'server.rpg',
 	'/servers/apocalyptic': 'server.apocalyptic'
+	*/
+
+	/*
+	// Debug stuff
+	'/dev/res': 'dev.res',
+	'/dev/req': 'dev.req',
+	'/dev/session': 'dev.session',
+	'/dev/user': 'dev.user',
 	*/
 
 };

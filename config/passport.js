@@ -124,6 +124,7 @@ passport.use(new LocalStrategy(function (username, password, done) {
  * to the `Authorization` header).  While this approach is not recommended by
  * the specification, in practice it is quite common.
  */
+/*
 passport.use(new BasicStrategy(
 
 function (username, password, done) {
@@ -142,6 +143,7 @@ function (username, password, done) {
         return done(null, user);
     });
 }));
+*/
 
 passport.use(new ClientPasswordStrategy(
 

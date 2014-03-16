@@ -2,14 +2,14 @@
  * UserController
  *
  * @module		:: Controller
- * @description	:: Contains logic for handling requests.
+ * @description	:: Contains global users API.
  */
 
 //FIXME: Поменять на глобальную переменную
 var mysql = require('mysql'),
 	cfg = require('../../config/local.js');
 
-function handleGCDBDisconnect() {
+function handleDBDisconnect() {
 	gcdbconn = require('mysql').createConnection({
 		host: cfg.gcdb.host,
 		database: cfg.gcdb.database,
@@ -18,21 +18,78 @@ function handleGCDBDisconnect() {
 	});
 	gcdbconn.connect(function (err) {
 		if (err) {
-			setTimeout(handleGCDBDisconnect, 1000);
+			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcdbconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			handleGCDBDisconnect();
+			handleDBDisconnect();
 		} else {
 			throw err;
 		}
 	});
-};
-handleGCDBDisconnect();
 
-function handleMainDBDisconnect() {
+	gcrpgconn = require('mysql').createConnection({
+		host: cfg.gcrpg.host,
+		database: cfg.gcrpg.database,
+		user: cfg.gcrpg.user,
+		password: cfg.gcrpg.password
+	});
+	gcrpgconn.connect(function (err) {
+		if (err) {
+			setTimeout(handleDBDisconnect, 1000);
+		}
+	});
+
+	gcrpgconn.on('error', function (err) {
+		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			handleDBDisconnect();
+		} else {
+			throw err;
+		}
+	});
+
+	gcmainconn = require('mysql').createConnection({
+		host: cfg.gcmain.host,
+		database: cfg.gcmain.database,
+		user: cfg.gcmain.user,
+		password: cfg.gcmain.password
+	});
+	gcmainconn.connect(function (err) {
+		if (err) {
+			setTimeout(handleDBDisconnect, 1000);
+		}
+	});
+
+	gcmainconn.on('error', function (err) {
+		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			handleDBDisconnect();
+		} else {
+			throw err;
+		}
+	});
+
+	gcapoconn = require('mysql').createConnection({
+		host: cfg.gcapo.host,
+		database: cfg.gcapo.database,
+		user: cfg.gcapo.user,
+		password: cfg.gcapo.password
+	});
+	gcapoconn.connect(function (err) {
+		if (err) {
+			setTimeout(handleDBDisconnect, 1000);
+		}
+	});
+
+	gcapoconn.on('error', function (err) {
+		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			handleDBDisconnect();
+		} else {
+			throw err;
+		}
+	});
+
 	maindbconn = require('mysql').createConnection({
 		host: cfg.maindb.host,
 		database: cfg.maindb.database,
@@ -41,31 +98,38 @@ function handleMainDBDisconnect() {
 	});
 	maindbconn.connect(function (err) {
 		if (err) {
-			setTimeout(handleMainDBDisconnect, 1000);
+			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	maindbconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			handleMainDBDisconnect();
+			handleDBDisconnect();
 		} else {
 			throw err;
 		}
 	});
 };
-handleMainDBDisconnect();
+handleDBDisconnect();
 
 module.exports = {
 
-	index: function (req, res) {
-
-	},
-
 	current: function (req, res) {
+		if (!req.user) {
+			return res.json({
+				message: 'You\'re not logged on',
+				documentation_url: sails.docs_url
+			});
+		}
+
 		var username =  req.user.username;
 		var obj = {
 			username: req.user.username,
-			lastseen: null,
+			lastseen: {
+				main: null,
+				rpg: null,
+				apocalyptic: null
+			},
 			reg_date: null,
 			prefix: null,
 			nick_color: null,
@@ -73,7 +137,43 @@ module.exports = {
 		};
 
 		async.waterfall([
-			function findRegDate(callback) {
+			function findLastseenMain(callback) {
+				gcmainconn.query('SELECT time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback(null, obj);
+					} else {
+						obj.lastseen.main = result[0].time;
+						callback(null, obj);
+					}
+				});
+			},
+			function findLastseenRpg(obj, callback) {
+				gcrpgconn.query('SELECT time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback(null, obj);
+					} else {
+						obj.lastseen.rpg = result[0].time;
+						callback(null, obj);
+					}
+				});
+			},
+			function findLastseenApo(obj, callback) {
+				gcapoconn.query('SELECT time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback(null, obj);
+					} else {
+						obj.lastseen.apocalyptic = result[0].time;
+						callback(null, obj);
+					}
+				});
+			},
+			function findRegDate(obj, callback) {
 				gcdbconn.query('SELECT reg_date FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
@@ -100,8 +200,16 @@ module.exports = {
 				});
 			}
 		], function (err, obj) {
-			if (err) throw err;
-
+			if (err) {
+				if (err.show) {
+					res.status(404).json({
+						message: err.message,
+						documentation_url: sails.docs_url
+					});
+				} else {
+					throw err;
+				}
+			}
 			res.json(obj);
 		});
 
@@ -112,7 +220,11 @@ module.exports = {
 		var username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
 		var obj = {
 			username: username,
-			lastseen: null,
+			lastseen: {
+				main: null,
+				rpg: null,
+				apocalyptic: null
+			},
 			reg_date: null,
 			prefix: null,
 			nick_color: null,
@@ -120,20 +232,58 @@ module.exports = {
 		};
 
 		async.waterfall([
-			function findId(callback) {
+			function userExists(callback) {
 				gcdbconn.query('SELECT id FROM users WHERE login = ?', [username], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback({
+							show: true,
+							message: 'User not exists'
+						});
+					} else {
+						callback(null);
+					}
+				});
+			},
+			function findLastseenMain(callback) {
+				gcmainconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
 						callback(null, obj);
 					} else {
-						obj.id = result[0].id;
+						obj.lastseen.main = result[0].time;
+						callback(null, obj);
+					}
+				});
+			},
+			function findLastseenRpg(obj, callback) {
+				gcrpgconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback(null, obj);
+					} else {
+						obj.lastseen.rpg = result[0].time;
+						callback(null, obj);
+					}
+				});
+			},
+			function findLastseenApo(obj, callback) {
+				gcapoconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback(null, obj);
+					} else {
+						obj.lastseen.apocalyptic = result[0].time;
 						callback(null, obj);
 					}
 				});
 			},
 			function findRegDate(obj, callback) {
-				gcdbconn.query('SELECT reg_date FROM users WHERE login = ?', [username], function (err, result) {
+				gcdbconn.query('SELECT UNIX_TIMESTAMP(reg_date) AS reg_date FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {

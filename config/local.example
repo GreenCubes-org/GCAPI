@@ -1,0 +1,70 @@
+module.exports = {
+	appName: 'GC.API',
+
+	port: process.env.PORT || 80, //Or change it to 433 if https
+
+	// The runtime "environment" of your app is either 'development' or 'production'.
+	environment: process.env.NODE_ENV || 'production',
+
+	//Session secret
+	secret: 'RANDOMLOGSTRINGLOGNERTHANTHIS', //Make it pure random
+
+	// Servers hosts and ports.
+	srv: {
+		main: {
+			host: 'srv1.greencubes.org',
+			port: 25565
+		},
+		rpg: {
+			host: 'srv2.greencubes.org',
+			port: 25565
+		},
+		apocalyptic: {
+			host: 'srv3.greencubes.org',
+			port: 10000
+		}
+	},
+
+	appdb: { //Application DB
+		host: 'localhost',
+		user: '',
+		password: '',
+		database: '',
+		socketPath: ''
+	},
+	gcdb: { //Site DB
+		host: 'localhost',
+		user: '',
+		password: '',
+		database: '',
+		socketPath: ''
+	},
+	maindb: { //User auth DB
+		host: 'localhost',
+		user: '',
+		password: '',
+		database: '',
+		socketPath: ''
+	},
+	gcmain: { //GC.Main DB
+		host: 'localhost',
+		user: '',
+		password: '',
+		database: '',
+		socketPath: ''
+	},
+	gcrpg: { //GC.RPG DB
+		host: 'localhost',
+		user: '',
+		password: '',
+		database: '',
+		socketPath: ''
+	},
+	gcapo: { //GC.Apocalyptic DB
+		host: 'localhost',
+		user: '',
+		password: '',
+		database: '',
+		socketPath: ''
+	}
+};

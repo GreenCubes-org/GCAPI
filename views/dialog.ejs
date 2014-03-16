@@ -1,5 +1,6 @@
 <% title = cli.name + ' запрашивает доступ к аккаунту GreenCubes!';
-styles.push('main.css') %>
+styles.push('main.css');
+scripts.push('dialog.js') %>
 
 <!DOCTYPE html>
 <html>
@@ -7,21 +8,21 @@ styles.push('main.css') %>
 		 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		 <title><%- title %></title>
 		 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		 <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 		 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		 <meta property="og:title" content="<%- title %>" />
 		 <meta property="og:type" content="website" />
 		 <meta property="og:image" content="/images/logo.png">
+		<link rel="icon" type="image/png" href="//greencubes.org/favicon.png" />
 		 <%- renderCSSTags(styles) %>
 		 <%- renderJSTags(scripts) %>
 	</head>
 
 	<body>
 		<div class="gc-center">
-			<a href="/"><img class="ui image gc-logo gc-center" src="/images/gclogo.png"></a>
+			<img class="ui image gc-logo gc-center" src="/images/gclogo.png">
 			<h2>Привет, <%= user.username %>! Приложение <br><b><%= cli.name %></b> (<%= cli.text %>) <br>
 				просит доступа к твоему аккаунту.</h2>
-			<form id="loginform" action="/oauth/authorize/decision" method="post">
+			<form id="oauthform" action="/oauth/authorize/decision" method="post">
 				<input name="transaction_id" type="hidden" value="<%= transactionID %>">
 				<div class="field" style="margin: 0 auto;width: 35%;">
 					<div class="ui list">
@@ -35,15 +36,12 @@ styles.push('main.css') %>
 				</div>
 				<div class="ui form" style="display: inline-block !important; margin-top: 20px;">
 					<div class="allowbutton gc-center">
-						<input type="submit" class="allowbutton" title="Разрешить" value="">
-					</div>
-					<div class="cancelbutton gc-center">
-						<input type="submit" class="cancelbutton" title="Отменить" value="" name="cancel">
+						<input type="submit" class="allowbutton" id="allow" value="">
 					</div>
 				</div>
 			</form>
-			<a href="#" class="wtflink">Что это?</a>
-		  <div id="loginerr"></div>
+			<a id="wtflink" href="/logout">Это не ваш аккаунт?</a>
+			<div id="loginerr"></div>
 		</div>
 	</body>
 </html>

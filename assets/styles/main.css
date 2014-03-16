@@ -1,7 +1,45 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-Regular.eot");
+  src: url("/fonts/ClearSans-Regular.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-Regular.ttf") format("truetype"),
+       url("/fonts/ClearSans-Regular.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-Italic.eot");
+  src: url("/fonts/ClearSans-Italic.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-Italic.ttf") format("truetype"),
+       url("/fonts/ClearSans-Italic.woff") format("woff");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-Bold.eot");
+  src: url("/fonts/ClearSans-Bold.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-Bold.ttf") format("truetype"),
+       url("/fonts/ClearSans-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-BoldItalic.eot");
+  src: url("/fonts/ClearSans-BoldItalic.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-BoldItalic.ttf") format("truetype"),
+       url("/fonts/ClearSans-BoldItalic.woff") format("woff");
+  font-style: italic;
+  font-weight: 700;
+}
 
 body {
-	font-family: "PT sans","Helvetica Neue",sans-serif !important;
+	font-family: "Clear Sans","Helvetica Neue",sans-serif !important;
 	color: rgb(85, 85, 85);
 	margin: 0px;
 }
@@ -71,7 +109,7 @@ a:hover, a:active {
 .gc-logo {
 	height: 100px;
 	font-size: 0.9rem;
-	padding-top: 5%;
+	padding-top: 10%;
 }
 
 #loginerr {
@@ -152,7 +190,7 @@ a:hover, a:active {
 	background: url('/images/red_pressed.png') no-repeat scroll 0 0 transparent;
 }
 
-.wtflink {
+#wtflink {
 	font-size: 13px;
 }
 .ui.form textarea, .ui.form select, .ui.form input[type="text"], .ui.form input[type="password"] {

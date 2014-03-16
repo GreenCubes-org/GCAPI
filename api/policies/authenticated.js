@@ -10,6 +10,11 @@ module.exports = function (req, res, ok) {
 
   // User is not allowed
   else {
-    return res.send("You are not permitted to perform this action.", 403);
+	var response = {
+		message: 'Forbidden. Need authorization',
+		documentation_url: sails.docs_url
+	};
+
+    return res.status(403).json(response);
   }
 };
