@@ -18,7 +18,7 @@ module.exports.routes = {
 	'/api/info': 'api.info',
 
 	/* User API */
-	'/users/:user': 'user.user',
+	'/users/:user': 'user.info',
 
 	/* GC.Main section */
 	'/main/status': 'main.status',
