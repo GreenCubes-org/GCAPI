@@ -4,35 +4,7 @@
  * @module		:: Controller
  * @description	:: GC.RPG API.
  */
-var mysql = require('mysql'),
-	cfg = require('../../config/local.js'),
-	net = require('net');
-
-function handleDBDisconnect() {
-	gcrpgconn = require('mysql').createConnection({
-		host: cfg.gcrpg.host,
-		database: cfg.gcrpg.database,
-		user: cfg.gcrpg.user,
-		password: cfg.gcrpg.password
-	});
-	gcrpgconn.connect(function (err) {
-		if (err) {
-			gcrpgconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcrpgconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcrpgconn.end();
-			handleDBDisconnect();
-		} else {
-			gcrpgconn.end();
-			throw err;
-		}
-	});
-};
-handleDBDisconnect();
+var net = require('net');
 
 module.exports = {
 

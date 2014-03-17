@@ -4,35 +4,7 @@
  * @module		:: Controller
  * @description	:: GC.Apocalyptic API.
  */
-var mysql = require('mysql'),
-	cfg = require('../../config/local.js'),
-	net = require('net');
-
-function handleDBDisconnect() {
-	gcapoconn = require('mysql').createConnection({
-		host: cfg.gcapo.host,
-		database: cfg.gcapo.database,
-		user: cfg.gcapo.user,
-		password: cfg.gcapo.password
-	});
-	gcapoconn.connect(function (err) {
-		if (err) {
-			gcapoconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcapoconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcapoconn.end();
-			handleDBDisconnect();
-		} else {
-			gcapoconn.end();
-			throw err;
-		}
-	});
-};
-handleDBDisconnect();
+var net = require('net');
 
 module.exports = {
 

@@ -4,35 +4,7 @@
  * @module		:: Controller
  * @description	:: GC.Main API.
  */
-var mysql = require('mysql'),
-	cfg = require('../../config/local.js'),
-	net = require('net');
-
-function handleDBDisconnect() {
-	gcmainconn = require('mysql').createConnection({
-		host: cfg.gcmain.host,
-		database: cfg.gcmain.database,
-		user: cfg.gcmain.user,
-		password: cfg.gcmain.password
-	});
-	gcmainconn.connect(function (err) {
-		if (err) {
-			gcmainconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcmainconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcmainconn.end();
-			handleDBDisconnect();
-		} else {
-			gcmainconn.end();
-			throw err;
-		}
-	});
-};
-handleDBDisconnect();
+var net = require('net');
 
 module.exports = {
 

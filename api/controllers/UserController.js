@@ -5,133 +5,11 @@
  * @description	:: Contains global users API.
  */
 
-//FIXME: Поменять на глобальную переменную
-var mysql = require('mysql'),
-	cfg = require('../../config/local.js');
-
-function handleDBDisconnect() {
-	gcdbconn = require('mysql').createConnection({
-		host: cfg.gcdb.host,
-		database: cfg.gcdb.database,
-		user: cfg.gcdb.user,
-		password: cfg.gcdb.password
-	});
-	gcdbconn.connect(function (err) {
-		if (err) {
-			gcdbconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcdbconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcdbconn.end();
-			handleDBDisconnect();
-		} else {
-			gcdbconn.end();
-			throw err;
-		}
-	});
-
-	gcrpgconn = require('mysql').createConnection({
-		host: cfg.gcrpg.host,
-		database: cfg.gcrpg.database,
-		user: cfg.gcrpg.user,
-		password: cfg.gcrpg.password
-	});
-	gcrpgconn.connect(function (err) {
-		if (err) {
-			gcrpgconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcrpgconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcrpgconn.end();
-			handleDBDisconnect();
-		} else {
-			gcrpgconn.end();
-			throw err;
-		}
-	});
-
-	gcmainconn = require('mysql').createConnection({
-		host: cfg.gcmain.host,
-		database: cfg.gcmain.database,
-		user: cfg.gcmain.user,
-		password: cfg.gcmain.password
-	});
-	gcmainconn.connect(function (err) {
-		if (err) {
-			gcmainconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcmainconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcmainconn.end();
-			handleDBDisconnect();
-		} else {
-			gcmainconn.end();
-			throw err;
-		}
-	});
-
-	gcapoconn = require('mysql').createConnection({
-		host: cfg.gcapo.host,
-		database: cfg.gcapo.database,
-		user: cfg.gcapo.user,
-		password: cfg.gcapo.password
-	});
-	gcapoconn.connect(function (err) {
-		if (err) {
-			gcapoconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	gcapoconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			gcapoconn.end();
-			handleDBDisconnect();
-		} else {
-			gcapoconn.end();
-			throw err;
-		}
-	});
-
-	maindbconn = require('mysql').createConnection({
-		host: cfg.maindb.host,
-		database: cfg.maindb.database,
-		user: cfg.maindb.user,
-		password: cfg.maindb.password
-	});
-	maindbconn.connect(function (err) {
-		if (err) {
-			maindbconn.end();
-			setTimeout(handleDBDisconnect, 1000);
-		}
-	});
-
-	maindbconn.on('error', function (err) {
-		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-			maindbconn.end();
-			handleDBDisconnect();
-		} else {
-			maindbconn.end();
-			throw err;
-		}
-	});
-};
-handleDBDisconnect();
-
 module.exports = {
 
 	info: function (req, res) {
-		var username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
-		var obj = {
+		username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
+		obj = {
 			username: username,
 			lastseen: {
 				main: null,
@@ -145,6 +23,7 @@ module.exports = {
 		};
 
 		async.waterfall([
+
 			function userExists(callback) {
 				gcdbconn.query('SELECT id FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
