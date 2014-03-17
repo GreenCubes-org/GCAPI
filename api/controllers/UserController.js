@@ -137,9 +137,9 @@ module.exports = {
 			});
 		}
 
-		var username =  req.user.username;
+		var username =  req.user.username.replace(/[^a-zA-Z0-9_-]/g, '');
 		var obj = {
-			username: req.user.username,
+			username: username,
 			lastseen: {
 				main: null,
 				rpg: null,
