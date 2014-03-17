@@ -17,14 +17,8 @@ module.exports.routes = {
 	/* Web-API API (lolwhat) */
 	'/api/info': 'api.info',
 
-	/* OAuth client login */
-	'post /login': 'auth.login',
-	'get /login': 'auth.loginTpl',
-	'/logout': 'auth.logout',
-
 	/* User API */
 	'/users/:user': 'user.user',
-	'/user': 'user.current',
 
 	/* GC.Main section */
 	'/main/status': 'main.status',
