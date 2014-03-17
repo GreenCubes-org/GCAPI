@@ -30,20 +30,4 @@ module.exports.routes = {
 	/* GC.Apocalyptic section */
 	'/apocalyptic/status': 'apocalyptic.status'
 
-	/*
-	// Server info API
-	'/servers': 'server.index',
-	'/servers/main': 'server.main',
-	'/servers/rpg': 'server.rpg',
-	'/servers/apocalyptic': 'server.apocalyptic'
-	*/
-
-	/*
-	// Debug stuff
-	'/dev/res': 'dev.res',
-	'/dev/req': 'dev.req',
-	'/dev/session': 'dev.session',
-	'/dev/user': 'dev.user',
-	*/
-
 };
