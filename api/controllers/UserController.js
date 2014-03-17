@@ -18,14 +18,17 @@ function handleDBDisconnect() {
 	});
 	gcdbconn.connect(function (err) {
 		if (err) {
+			gcdbconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcdbconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcdbconn.end();
 			handleDBDisconnect();
 		} else {
+			gcdbconn.end();
 			throw err;
 		}
 	});
@@ -38,14 +41,17 @@ function handleDBDisconnect() {
 	});
 	gcrpgconn.connect(function (err) {
 		if (err) {
+			gcrpgconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcrpgconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcrpgconn.end();
 			handleDBDisconnect();
 		} else {
+			gcrpgconn.end();
 			throw err;
 		}
 	});
@@ -58,14 +64,17 @@ function handleDBDisconnect() {
 	});
 	gcmainconn.connect(function (err) {
 		if (err) {
+			gcmainconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcmainconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcmainconn.end();
 			handleDBDisconnect();
 		} else {
+			gcmainconn.end();
 			throw err;
 		}
 	});
@@ -78,14 +87,17 @@ function handleDBDisconnect() {
 	});
 	gcapoconn.connect(function (err) {
 		if (err) {
+			gcapoconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcapoconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcapoconn.end();
 			handleDBDisconnect();
 		} else {
+			gcapoconn.end();
 			throw err;
 		}
 	});
@@ -98,14 +110,17 @@ function handleDBDisconnect() {
 	});
 	maindbconn.connect(function (err) {
 		if (err) {
+			maindbconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	maindbconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			maindbconn.end();
 			handleDBDisconnect();
 		} else {
+			maindbconn.end();
 			throw err;
 		}
 	});

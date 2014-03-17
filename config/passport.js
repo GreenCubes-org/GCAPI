@@ -21,14 +21,17 @@ function handleGCDBDisconnect() {
 	});
 	gcdbconn.connect(function (err) {
 		if (err) {
+			gcdbconn.end();
 			setTimeout(handleGCDBDisconnect, 1000);
 		}
 	});
 
 	gcdbconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcdbconn.end();
 			handleGCDBDisconnect();
 		} else {
+			gcdbconn.end();
 			throw err;
 		}
 	});
@@ -49,6 +52,7 @@ passport.deserializeUser(function (id, done) {
 			username: result[0].login,
 			password: result[0].password
 		});
+		gcdbconn.end();
 	});
 });
 
@@ -60,19 +64,22 @@ passport.use(new LocalStrategy(function (username, password, done) {
 		gcdbconn.query('SELECT id, password, activation_code FROM users WHERE login = ?', [username], function (err, result) {
 			// database error
 			if (err) {
-				return done(err, false, {
+				done(err, false, {
 					message: 'Ошибка базы данных'
 				});
+				return gcdbconn.end();
 				// username not found
 			} else if (result.length === 0) {
-				return done(null, false, {
+				done(null, false, {
 					message: 'Неверный логин/пароль'
 				});
+				return gcdbconn.end();
 				// check password
 			} else if (result[0].activation_code === undefined) {
-				return done(null, false, {
+				done(null, false, {
 					message: 'Аккаунт не активирован'
 				});
+				return gcdbconn.end();
 			} else {
 				var passwd = result[0].password.split('$');
 				var hash;
@@ -101,12 +108,14 @@ passport.use(new LocalStrategy(function (username, password, done) {
 					};
 
 				} else {
-					return done(null, false, {
+					done(null, false, {
 						message: 'Неверный пароль'
 					});
+					return gcdbconn.end();
 				}
 
 				done(null, user);
+				return gcdbconn.end();
 			}
 		});
 	});

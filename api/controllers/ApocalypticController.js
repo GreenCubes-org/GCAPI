@@ -17,14 +17,17 @@ function handleDBDisconnect() {
 	});
 	gcapoconn.connect(function (err) {
 		if (err) {
+			gcapoconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcapoconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcapoconn.end();
 			handleDBDisconnect();
 		} else {
+			gcapoconn.end();
 			throw err;
 		}
 	});
@@ -57,7 +60,7 @@ module.exports = {
 				}).connect(cfg.srv.apocalyptic.port, cfg.srv.apocalyptic.host);
 			},
 			function getPlayersCount(obj, callback) {
-				gcmainconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {
+				gcapoconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -72,7 +75,7 @@ module.exports = {
 			if (err) {
 				if (!err.show) throw err;
 			}
-
+			gcapoconn.end();
 			res.json(obj);
 		});
 	}

@@ -17,14 +17,17 @@ function handleDBDisconnect() {
 	});
 	gcmainconn.connect(function (err) {
 		if (err) {
+			gcmainconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcmainconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcmainconn.end();
 			handleDBDisconnect();
 		} else {
+			gcmainconn.end();
 			throw err;
 		}
 	});
@@ -72,7 +75,7 @@ module.exports = {
 			if (err) {
 				if (!err.show) throw err;
 			}
-
+			gcmainconn.end();
 			res.json(obj);
 		});
 	},

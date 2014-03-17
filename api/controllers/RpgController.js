@@ -17,14 +17,17 @@ function handleDBDisconnect() {
 	});
 	gcrpgconn.connect(function (err) {
 		if (err) {
+			gcrpgconn.end();
 			setTimeout(handleDBDisconnect, 1000);
 		}
 	});
 
 	gcrpgconn.on('error', function (err) {
 		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			gcrpgconn.end();
 			handleDBDisconnect();
 		} else {
+			gcrpgconn.end();
 			throw err;
 		}
 	});
@@ -72,7 +75,7 @@ module.exports = {
 			if (err) {
 				if (!err.show) throw err;
 			}
-
+			gcrpgconn.end();
 			res.json(obj);
 		});
 	}
