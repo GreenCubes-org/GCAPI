@@ -1,7 +1,23 @@
+// local.js example
+
+/* Uncomment if https
+var sslKey = require('fs').readFileSync('server.key', 'utf8');
+var sslCery = require('fs').readFileSync('server.crt', 'utf8');
+*/
+
 module.exports = {
 	appName: 'GC.API',
 
 	port: process.env.PORT || 80, //Or change it to 433 if https
+
+	/* Uncomment if https
+	express: {
+		serverOptions: { 
+			key: sslKey,
+			cert: sslCert
+		}
+	},
+	*/
 
 	// The runtime "environment" of your app is either 'development' or 'production'.
 	environment: process.env.NODE_ENV || 'production',
