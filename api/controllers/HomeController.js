@@ -15,7 +15,8 @@ module.exports = {
 			main_economy_url: 'https://api.greencubes.org/main/economy',
 			rpg_status_url: 'https://api.greencubes.org/rpg/status',
 			apocalyptic_status_url: 'https://api.greencubes.org/apocalyptic/status',
-			api_info_url: 'https://api.greencubes.org/api/info',
+			meta_url: 'https://api.greencubes.org/meta',
+			rate_limit_url: 'https://api.greencubes.org/rate_limit',
 			documentation_url: docs_url
 		});
 	}
