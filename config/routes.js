@@ -14,8 +14,8 @@ module.exports.routes = {
 	/* Index */
 	'/': 'home.index',
 
-	/* Web-API API (lolwhat) */
-	'/api/info': 'api.info',
+	/* Meta API (lolwhat) */
+	'/meta': 'meta.info',
 
 	/* User API */
 	'/users/:user': 'user.info',
