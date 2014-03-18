@@ -16,7 +16,7 @@ module.exports = {
 			rpg_status_url: 'https://api.greencubes.org/rpg/status',
 			apocalyptic_status_url: 'https://api.greencubes.org/apocalyptic/status',
 			api_info_url: 'https://api.greencubes.org/api/info',
-			documentation_url: sails.docs_url
+			documentation_url: docs_url
 		});
 	}
 };

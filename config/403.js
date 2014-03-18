@@ -9,7 +9,7 @@ module.exports[403] = function forbidden(req, res, express404Handler) {
 
 	var response = {
 		message: 'Forbidden. Need authorization',
-		documentation_url: sails.docs_url
+		documentation_url: docs_url
 	};
 
 	res.status(403).json(response);

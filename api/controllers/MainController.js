@@ -47,7 +47,7 @@ module.exports = {
 			if (err) {
 				if (!err.show) throw err;
 			}
-			gcmainconn.end();
+
 			res.json(obj);
 		});
 	},

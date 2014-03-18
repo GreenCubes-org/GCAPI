@@ -47,7 +47,7 @@ module.exports = {
 			if (err) {
 				if (!err.show) throw err;
 			}
-			gcrpgconn.end();
+
 			res.json(obj);
 		});
 	}

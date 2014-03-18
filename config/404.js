@@ -9,7 +9,7 @@ module.exports[404] = function pageNotFound(req, res, express404Handler) {
 
 	var response = {
 		message: 'Not Found',
-		documentation_url: sails.docs_url
+		documentation_url: docs_url
 	};
 
 	res.status(404).json(response);

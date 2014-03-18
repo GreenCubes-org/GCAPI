@@ -13,7 +13,7 @@ module.exports[500] = function serverErrorOccurred(errors, req, res, expressErro
 	// Build data for response
 	var response = {
 		message: 'Internal Server Error',
-		documentation_url: sails.docs_url
+		documentation_url: docs_url
 	};
 
 	// Ensure that each error is formatted correctly
