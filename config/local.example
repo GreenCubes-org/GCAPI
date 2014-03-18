@@ -88,7 +88,8 @@ module.exports = {
 		port: 6379,
 		ttl: 129600, // = 1.5 days
 		db: {//change this if other db
-			session: 0
+			session: 0,
+			limit: 1
 		}, 
 		pass:'<redis auth password>'
 	}

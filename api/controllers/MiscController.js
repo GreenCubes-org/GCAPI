@@ -1,8 +1,8 @@
 /**
- * ApiController
+ * MiscController
  *
  * @module		:: Controller
- * @description	:: Web-API API.
+ * @description	:: Miscellaneous API's.
  */
 var version = require('../../package.json').version,
 	git = require('git-rev');
@@ -15,6 +15,7 @@ module.exports = {
 			tag: null
 		}
 		async.waterfall([
+
 			function getCommit(callback) {
 				git.short(function (result) {
 					obj.commit = result;
@@ -36,6 +37,14 @@ module.exports = {
 					}
 				]
 			});
+		});
+	},
+
+	rateLimit: function (req, res) {
+		res.json({
+			limit: req.limitTotal,
+			remaining: req.limitRemaining,
+			reset: req.limitReset
 		});
 	}
 };

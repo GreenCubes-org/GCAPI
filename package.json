@@ -12,7 +12,9 @@
     "mysql": "2.0.0-alpha9",
     "sails-mysql": "~0.9.0",
     "connect-redis": "1.4.x",
-    "git-rev": "0.2.x"
+    "git-rev": "0.2.x",
+    "redis": "0.9.*",
+    "ratelimiter": "1.0.x"
   },
   "scripts": {
     "start": "node app.js",

@@ -16,6 +16,14 @@ module.exports.bootstrap = function (cb) {
 	global.mysql = require('mysql');
 	global.cfg = require('./local.js');
 
+	global.redis = require('redis').createClient();
+	if (cfg.redis.pass) redis.auth(cfg.redis.pass);
+	redis.select(cfg.redis.db.limit);
+	redis.on('error', function (err) {
+		console.error("[REDIS][ERR]: " + err);
+	});
+
+
 	global.gcdbconn = require('mysql').createPool({
 		host: cfg.gcdb.host,
 		database: cfg.gcdb.database,
