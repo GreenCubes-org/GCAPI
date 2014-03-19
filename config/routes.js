@@ -14,7 +14,7 @@ module.exports.routes = {
 	/* Index */
 	'/': 'home.index',
 
-	/* Meta API (lolwhat) */
+	/* Misc API (lolwhat) */
 	'/meta': 'misc.info',
 	'/rate_limit': 'misc.rateLimit',
 
