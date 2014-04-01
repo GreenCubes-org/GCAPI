@@ -17,6 +17,8 @@ module.exports.routes = {
 	/* Misc API (lolwhat) */
 	'/meta': 'misc.info',
 	'/rate_limit': 'misc.rateLimit',
+	
+	'/deployment': 'dev.deploymentWebHook',
 
 	/* User API */
 	'/users/:user': 'user.info',

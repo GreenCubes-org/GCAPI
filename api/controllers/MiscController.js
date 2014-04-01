@@ -4,6 +4,7 @@
  * @module		:: Controller
  * @description	:: Miscellaneous API's.
  */
+
 var version = require('../../package.json').version,
 	git = require('git-rev');
 
