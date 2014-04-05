@@ -26,17 +26,11 @@ module.exports[500] = function serverErrorOccurred(errors, req, res, expressErro
 		}
 
 		displayedErrors[i] = {
-			message: displayedErrors[i].message,
-			stack: displayedErrors[i].stack
+			message: displayedErrors[i].message
 		};
 
 		// Log error to log adapter
 		sails.log.error(displayedErrors[i].stack);
-	}
-
-	// In production, don't display any identifying information about the error(s)
-	if (sails.config.environment === 'development') {
-		response.errors = displayedErrors;
 	}
 
 	res.status(500).json(response);

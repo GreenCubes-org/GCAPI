@@ -6,7 +6,6 @@
   "dependencies": {
     "sails": "0.9.8",
     "grunt": "0.4.1",
-    "sails-disk": "~0.9.0",
     "ejs": "0.8.4",
     "optimist": "0.3.4",
     "mysql": "2.0.0-alpha9",
@@ -14,7 +13,14 @@
     "connect-redis": "1.4.x",
     "git-rev": "0.2.x",
     "redis": "0.9.*",
-    "ratelimiter": "1.0.x"
+    "ratelimiter": "1.0.x",
+	"oauth2orize": "~0.1.0",
+	"connect-ensure-login": "~0.1.1",
+	"passport": "~0.2.0",
+    "passport-http-bearer": "~1.0.1",
+    "passport-http": "~0.2.2",
+    "passport-oauth2-client-password": "~0.1.1",
+    "passport-local": "~1.0.0"
   },
   "scripts": {
     "start": "node app.js",
