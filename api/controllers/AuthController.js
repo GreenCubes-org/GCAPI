@@ -21,7 +21,7 @@ module.exports = {
 				if (info.message === 'Missing credentials') info.message = 'Введите логин/пароль';
 				return res.json({
 					message: info,
-					documentation_url: sails.docs_url
+					documentation_url: docs_url
 				});
 			}
 			req.logIn(user, function (err) {
@@ -29,7 +29,7 @@ module.exports = {
 
 				res.json({
 					message: 'Success',
-					documentation_url: sails.docs_url
+					documentation_url: docs_url
 				});
 			});
 		})(req, res);
@@ -40,12 +40,12 @@ module.exports = {
 			req.logout();
 			res.json({
 				message: 'Success',
-				documentation_url: sails.docs_url
+				documentation_url: docs_url
 			});
 		} else {
 			res.json({
 				message: 'You\'re not logged on',
-				documentation_url: sails.docs_url
+				documentation_url: docs_url
 			});
 		}
 	},
@@ -54,21 +54,21 @@ module.exports = {
 		if (!req.query.client_id) {
 			res.json({
 				message: "client_id is not defined",
-				documentation_url: sails.docs_url
+				documentation_url: docs_url
 			});
 			return;
 		}
 		if (!req.query.redirect_uri) {
 			res.json({
 				message: "redirect_uri is not defined",
-				documentation_url: sails.docs_url
+				documentation_url: docs_url
 			});
 			return;
 		}
 		if (!req.query.response_type || req.query.response_type !== 'code') {
 			res.json({
 				message: "Wrong response_type",
-				documentation_url: sails.docs_url
+				documentation_url: docs_url
 			});
 			return;
 		}

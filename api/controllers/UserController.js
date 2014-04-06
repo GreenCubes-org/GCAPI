@@ -11,7 +11,7 @@ module.exports = {
 		if (!req.user) {
 			return res.json({
 				message: 'You\'re not logged on',
-				documentation_url: sails.docs_url
+				documentation_url: docs_url
 			});
 		}
 
@@ -97,7 +97,7 @@ module.exports = {
 				if (err.show) {
 					res.status(404).json({
 						message: err.message,
-						documentation_url: sails.docs_url
+						documentation_url: docs_url
 					});
 				} else {
 					throw err;

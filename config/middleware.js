@@ -56,7 +56,7 @@ module.exports = {
 					clientId: client.id,
 					redirectURI: redirectURI,
 					userId: user.id,
-					scope: ares.scope
+					scope: client.scope
 				}).done(function (err, code) {
 					if (err) {
 						return done(err, null);
@@ -120,23 +120,23 @@ module.exports = {
 
 			app.get('/oauth/authorize', function (req, res, done) {
 				if (!req.query.client_id) {
-					res.json({
+					res.json(400, {
 						error: "client_id is not defined",
-						documentation_url: sails.docs_url
+						documentation_url: docs_url
 					});
 					return;
 				}
 				if (!req.query.redirect_uri) {
-					res.json({
+					res.json(400, {
 						error: "redirect_uri is not defined",
-						documentation_url: sails.docs_url
+						documentation_url: docs_url
 					});
 					return;
 				}
 				if (!req.query.response_type || req.query.response_type !== 'code') {
-					res.json({
+					res.json(400, {
 						error: "wrong response_type",
-						documentation_url: sails.docs_url
+						documentation_url: docs_url
 					});
 					return;
 				}
@@ -174,10 +174,18 @@ module.exports = {
 				});
 			}),
 			function (req, res) {
+				var scopes;
+				if (req.oauth2.client.scope.split(',') === req.oauth2.client.scope) {
+					scopes = req.oauth2.client.scope
+				} else {
+					scopes = req.oauth2.client.scope.split(',')
+				}
+				
 				res.render('dialog', {
 					transactionID: req.oauth2.transactionID,
 					user: req.user,
-					cli: req.oauth2.client
+					cli: req.oauth2.client,
+					scopes: scopes
 				});
 			});
 

@@ -24,14 +24,17 @@ scripts.push('dialog.js') %>
 				просит доступа к твоему аккаунту.</h2>
 			<form id="oauthform" action="/oauth/authorize/decision" method="post">
 				<input name="transaction_id" type="hidden" value="<%= transactionID %>">
+				<input name="scope" type="hidden" value="<%= cli.scope %>">
 				<div class="field" style="margin: 0 auto;width: 35%;">
 					<div class="ui list">
+					<% if(_.contains(scopes,'profile')) { %>
 						<div class="item">
 							<div class="content">
 								<div class="header">Приложение сможет узнать базовую информацию о игроке</div>
 								Последний вход, цвет ника, префикс, скин.
 							</div>
 						</div>
+					<% } %>
 					</div>
 				</div>
 				<div class="ui form" style="display: inline-block !important; margin-top: 20px;">

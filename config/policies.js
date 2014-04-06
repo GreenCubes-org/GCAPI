@@ -18,6 +18,6 @@ module.exports.policies = {
 	
 	'User': {
 		'*': true,
-		'currentUserInfo': 'oauth'
+		'currentUserInfo': 'scopeProfile'
 	}
 };

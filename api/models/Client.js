@@ -29,6 +29,11 @@ module.exports = {
 			type: 'STRING',
 			required: true
 		},
+		
+		scope: {
+			type: 'STRING',
+			required: true
+		},
 
 		text: {
 			type: 'STRING',
