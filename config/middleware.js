@@ -37,7 +37,7 @@ module.exports = {
 					res.set('Retry-After', after);
 					res.status(429).json({
 						message: 'Rate limit exceeded, retry later',
-						retry_in: ms(delta, {long: true}),
+						retry_in: delta,
 						documentation_url: docs_url
 					});
 				});
@@ -135,7 +135,7 @@ module.exports = {
 				}
 				if (!req.query.response_type || req.query.response_type !== 'code') {
 					res.json(400, {
-						error: "wrong response_type",
+						error: "Wrong response_type",
 						documentation_url: docs_url
 					});
 					return;
