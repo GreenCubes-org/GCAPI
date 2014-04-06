@@ -13,6 +13,11 @@ module.exports.routes = {
 
 	/* Index */
 	'/': 'home.index',
+	
+	/* OAuth client login */
+	'post /login': 'auth.login',
+	'get /login': 'auth.loginTpl',
+	'/logout': 'auth.logout',
 
 	/* Misc API (lolwhat) */
 	'/meta': 'misc.info',
@@ -21,7 +26,8 @@ module.exports.routes = {
 	'/deployment': 'dev.deploymentWebHook',
 
 	/* User API */
-	'/users/:user': 'user.info',
+	'/user': 'user.currentUserInfo',
+	'/users/:user': 'user.userInfo',
 
 	/* GC.Main section */
 	'/main/status': 'main.status',

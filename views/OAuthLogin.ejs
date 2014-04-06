@@ -1,0 +1,47 @@
+<% title = 'GreenCubes.Тикеты'
+styles.push('main.css');
+scripts.push('login.js') %>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		 <title><%- title %></title>
+		 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		 <meta property="og:title" content="<%- title %>" />
+		 <meta property="og:type" content="website" />
+		 <meta property="og:image" content="/images/logo.png">
+		<link rel="icon" type="image/png" href="//greencubes.org/favicon.png" />
+		 <%- renderCSSTags(styles) %>
+		 <%- renderJSTags(scripts) %>
+	</head>
+
+	<body>
+		<div class="gc-center">
+			<img class="ui image gc-logo gc-center" src="/images/gclogo.png">
+			<h2>Приложение <%= name %> (<%= description %>) просит доступ <br>
+				к твоему аккаунту на GreenCubes</h2>
+			<form id="loginform">
+				<div class="ui form" style="display: inline-block !important">
+					<div class="field">
+						<div class="ui left labeled icon input">
+							<input placeholder="Имя пользователя" type="text" name="username">
+							<i class="user icon"></i>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui left labeled icon input">
+							<input placeholder="Пароль" type="password" name="password">
+							<i class="lock icon"></i>
+						</div>
+					</div>
+					<div class="enterbutton gc-center">
+						<input type="submit" class="enterbutton" title="Войти" value="">
+					</div>
+				</div>
+			</form>
+		  <div id="loginerr"></div>
+		</div>
+	</body>
+</html>
