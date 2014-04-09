@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "GreenCubes API",
   "dependencies": {
-    "sails": "0.9.8",
+    "sails": "0.9.x",
     "grunt": "0.4.1",
     "ejs": "0.8.4",
     "optimist": "0.3.4",
