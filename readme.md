@@ -1,5 +1,4 @@
 # GreenCubes API
-### 0.1.0
 
 Application Programming Interface for [GreenCubes](http://greencubes.org)-related web-applications. Inspired by [GCMap](http://gcmap.ru).
 
