@@ -1,7 +1,5 @@
 #!/bin/sh
 
-cd
-
 git pull origin production
 
 npm install
