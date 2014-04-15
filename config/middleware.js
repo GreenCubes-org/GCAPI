@@ -8,6 +8,8 @@ module.exports = {
 	express: {
 		customMiddleware: function (app) {
 			
+			app.set('json spaces', 2);
+
 			/** Limiter **/
 			
 			app.use(function(req, res, next){
