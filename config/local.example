@@ -7,17 +7,11 @@ var sslCery = require('fs').readFileSync('server.crt', 'utf8');
 
 module.exports = {
 	appName: 'GC.API',
+	
+	explicitHost: '127.0.0.1',
 
 	port: process.env.PORT || 80, //Or change it to 433 if https
 
-	/* Uncomment if https
-	express: {
-		serverOptions: { 
-			key: sslKey,
-			cert: sslCert
-		}
-	},
-	*/
 
 	// The runtime "environment" of your app is either 'development' or 'production'.
 	environment: process.env.NODE_ENV || 'production',
@@ -37,7 +31,7 @@ module.exports = {
 		},
 		apocalyptic: {
 			host: 'srv3.greencubes.org',
-			port: 10000
+			port: 25565
 		}
 	},
 
