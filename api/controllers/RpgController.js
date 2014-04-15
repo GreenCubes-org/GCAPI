@@ -32,7 +32,7 @@ module.exports = {
 				}).connect(cfg.srv.rpg.port, cfg.srv.rpg.host);
 			},
 			function getPlayersCount(obj, callback) {
-				gcmainconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {
+				gcrpgconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
