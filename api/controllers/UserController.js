@@ -125,7 +125,6 @@ module.exports = {
 		};
 
 		async.waterfall([
-
 			function userExists(callback) {
 				gcdbconn.query('SELECT id FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
@@ -203,7 +202,16 @@ module.exports = {
 				});
 			}
 		], function (err, obj) {
-			if (err) throw err;
+			if (err) {
+				if (err.show) {
+					return res.json({
+						message: err.message,
+						documentation_url: docs_url
+					});
+				}
+
+				throw err;
+			}
 
 			res.json(obj);
 		});
