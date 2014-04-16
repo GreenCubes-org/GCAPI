@@ -25,8 +25,8 @@ module.exports = {
 			required: true
 		},
 
-		failRedirectURI: {
-			type: 'STRING',
+		owner: {
+			type: 'INTEGER',
 			required: true
 		},
 		
