@@ -31,7 +31,7 @@ module.exports = {
 
 		async.waterfall([
 			function findLastseenMain(callback) {
-				gcmainconn.query('SELECT time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+				gcmainconn.query('SELECT time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -43,7 +43,7 @@ module.exports = {
 				});
 			},
 			function findLastseenRpg(obj, callback) {
-				gcrpgconn.query('SELECT time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+				gcrpgconn.query('SELECT time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -55,7 +55,7 @@ module.exports = {
 				});
 			},
 			function findLastseenApo(obj, callback) {
-				gcapoconn.query('SELECT time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+				gcapoconn.query('SELECT time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -142,7 +142,7 @@ module.exports = {
 				});
 			},
 			function findLastseenMain(obj, callback) {
-				gcmainconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+				gcmainconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -154,7 +154,7 @@ module.exports = {
 				});
 			},
 			function findLastseenRpg(obj, callback) {
-				gcrpgconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+				gcrpgconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -166,7 +166,7 @@ module.exports = {
 				});
 			},
 			function findLastseenApo(obj, callback) {
-				gcapoconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
+				gcapoconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
