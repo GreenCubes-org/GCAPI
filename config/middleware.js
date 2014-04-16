@@ -7,42 +7,99 @@ var Limiter = require('ratelimiter'),
 module.exports = {
 	express: {
 		customMiddleware: function (app) {
-			
+
 			app.set('json spaces', 2);
 
 			/** Limiter **/
-			
-			app.use(function(req, res, next){
-				limit = new Limiter({
-					id: req.ip,
-					db: redis,
-					max: 1000
-				});
+			app.use(function (req, res, next) {
 
-				// Limiting magic
-				limit.get(function (err, limit) {
-					if (err) return next(err);
+				// Max count of requests
+				var maxReqs = 1000;
 
-					req.limitTotal = limit.total;
-					req.limitRemaining = limit.remaining;
-					req.limitReset = limit.reset;
-					res.set('X-RateLimit-Limit', limit.total);
-					res.set('X-RateLimit-Remaining', limit.remaining);
-					res.set('X-RateLimit-Reset', limit.reset);
+				// Exceptions. Don't limit those paths
+				var urlExceptions = [
+					'/',
+					'/rate_limit',
+					'/meta'
+				];
 
-					// all good
-					if (limit.remaining) return next();
+				if (_.contains(urlExceptions, req.path)) {
+					var ipHeader = req.headers['X-Real-IP'] || '127.0.0.1',
+						ip = (ipHeader !== '127.0.0.1') ? ipHeader.split(',')[0] : ipHeader;
 
-					// not good
-					var delta = (limit.reset * 1000) - Date.now() | 0;
-					var after = limit.reset - (Date.now() / 1000) | 0;
-					res.set('Retry-After', after);
-					res.status(429).json({
-						message: 'Rate limit exceeded, retry later',
-						retry_in: delta,
-						documentation_url: docs_url
+					var obj = {
+						reset: null,
+						count: null,
+						limit: null
+					};
+
+					async.waterfall([
+						function getLimits(callback) {
+							redis.mget('limit:' + ip + ':reset',
+									   'limit:' + ip + ':count',
+									   'limit:' + ip + ':limit', function (err, reply) {
+								if (err) return callback(err);
+
+								if (_.contains(reply, null)) {
+									obj.reset = (Date.now() + 3600000) / 1000 | 0
+									obj.count = maxReqs;
+									obj.limit = maxReqs;
+								} else {
+									obj.reset = parseInt(reply[0], 10);
+									obj.count = parseInt(reply[1], 10);
+									obj.limit = parseInt(reply[2], 10);
+								}
+
+								callback(null, obj);
+							});
+						}
+					],
+					function (err, obj) {
+						if (err) return next(err);
+
+						req.limitTotal = obj.limit;
+						req.limitRemaining = obj.count;
+						req.limitReset = obj.reset;
+
+						res.set('X-RateLimit-Limit', obj.limit);
+						res.set('X-RateLimit-Remaining', obj.count);
+						res.set('X-RateLimit-Reset', obj.reset);
+
+						next();
 					});
-				});
+				} else {
+					var limit = new Limiter({
+						id: req.ip,
+						db: redis,
+						max: maxReqs
+					});
+
+					// Limiting magic
+					limit.get(function (err, limit) {
+						if (err) return next(err);
+
+						req.limitTotal = limit.total;
+						req.limitRemaining = limit.remaining;
+						req.limitReset = limit.reset;
+
+						res.set('X-RateLimit-Limit', limit.total);
+						res.set('X-RateLimit-Remaining', limit.remaining);
+						res.set('X-RateLimit-Reset', limit.reset);
+
+						// all good
+						if (limit.remaining) return next();
+
+						// not good
+						var delta = (limit.reset * 1000) - Date.now() | 0;
+						var after = limit.reset - (Date.now() / 1000) | 0;
+						res.set('Retry-After', after);
+						res.status(429).json({
+							message: 'Rate limit exceeded, retry later',
+							retry_in: delta,
+							documentation_url: docs_url
+						});
+					});
+				}
 			});
 
 			/** oAuth Server **/
@@ -63,7 +120,7 @@ module.exports = {
 					if (err) {
 						return done(err, null);
 					}
-					
+
 					return done(null, code.code);
 				});
 			}));
@@ -100,9 +157,9 @@ module.exports = {
 						gcdbconn.query('SELECT login FROM users WHERE id = ?', [token.userId], function (err, result) {
 							if (err) return cb(err);
 
-							code.destroy(function(err) {
+							code.destroy(function (err) {
 								if (err) return done(err);
-								
+
 								if (result.length !== 0) {
 									done(null, {
 										token: token.token,
@@ -121,81 +178,81 @@ module.exports = {
 
 
 			app.get('/oauth/authorize', function (req, res, done) {
-				if (!req.query.client_id) {
-					res.json(400, {
-						error: "client_id is not defined",
-						documentation_url: docs_url
-					});
-					return;
-				}
-				if (!req.query.redirect_uri) {
-					res.json(400, {
-						error: "redirect_uri is not defined",
-						documentation_url: docs_url
-					});
-					return;
-				}
-				if (!req.query.response_type || req.query.response_type !== 'code') {
-					res.json(400, {
-						error: "Wrong response_type",
-						documentation_url: docs_url
-					});
-					return;
-				}
-				if (!req.isAuthenticated()) {
-					Client.findOne({
-						id: parseInt(req.query.client_id)
-					}, function (err, cli) {
-						if (err) return done(err);
-
-						res.render('OAuthLogin', {
-							layout: 'layout',
-							name: cli.name,
-							description: cli.text
+					if (!req.query.client_id) {
+						res.json(400, {
+							error: "client_id is not defined",
+							documentation_url: docs_url
 						});
-					});
-					return;
-				}
-				done();
-			},
-			server.authorize(function (clientID, redirectURI, done) {
-				Client.findOne({
-					id: clientID
-				}, function (err, cli) {
+						return;
+					}
+					if (!req.query.redirect_uri) {
+						res.json(400, {
+							error: "redirect_uri is not defined",
+							documentation_url: docs_url
+						});
+						return;
+					}
+					if (!req.query.response_type || req.query.response_type !== 'code') {
+						res.json(400, {
+							error: "Wrong response_type",
+							documentation_url: docs_url
+						});
+						return;
+					}
+					if (!req.isAuthenticated()) {
+						Client.findOne({
+							id: parseInt(req.query.client_id)
+						}, function (err, cli) {
+							if (err) return done(err);
 
-					if (err) {
-						return done(err);
+							res.render('OAuthLogin', {
+								layout: 'layout',
+								name: cli.name,
+								description: cli.text
+							});
+						});
+						return;
 					}
-					if (!cli) {
-						return done(null, false);
+					done();
+				},
+				server.authorize(function (clientID, redirectURI, done) {
+					Client.findOne({
+						id: clientID
+					}, function (err, cli) {
+
+						if (err) {
+							return done(err);
+						}
+						if (!cli) {
+							return done(null, false);
+						}
+						if (cli.redirectURI != redirectURI) {
+							return done(null, false);
+						}
+						return done(null, cli, cli.redirectURI);
+					});
+				}),
+				function (req, res) {
+					var scopes;
+					if (req.oauth2.client.scope.split(',') === req.oauth2.client.scope) {
+						scopes = req.oauth2.client.scope
+					} else {
+						scopes = req.oauth2.client.scope.split(',')
 					}
-					if (cli.redirectURI != redirectURI) {
-						return done(null, false);
-					}
-					return done(null, cli, cli.redirectURI);
+
+					res.render('dialog', {
+						transactionID: req.oauth2.transactionID,
+						user: req.user,
+						cli: req.oauth2.client,
+						scopes: scopes
+					});
 				});
-			}),
-			function (req, res) {
-				var scopes;
-				if (req.oauth2.client.scope.split(',') === req.oauth2.client.scope) {
-					scopes = req.oauth2.client.scope
-				} else {
-					scopes = req.oauth2.client.scope.split(',')
-				}
-				
-				res.render('dialog', {
-					transactionID: req.oauth2.transactionID,
-					user: req.user,
-					cli: req.oauth2.client,
-					scopes: scopes
-				});
-			});
 
 
 			app.post('/oauth/authorize/decision',
 				login.ensureLoggedIn(),
 				server.decision());
-			
+
 			server.serializeClient(function (client, done) {
 				return done(null, client.id);
 			});
