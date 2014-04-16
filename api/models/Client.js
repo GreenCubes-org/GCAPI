@@ -25,6 +25,11 @@ module.exports = {
 			required: true
 		},
 
+		homeURI: {
+			type: 'STRING',
+			required: true
+		},
+
 		owner: {
 			type: 'INTEGER',
 			required: true
