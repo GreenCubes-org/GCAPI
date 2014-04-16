@@ -9,7 +9,7 @@ module.exports = {
 
 	index: function (req, res) {
 		res.json({
-			user_url: 'https://api.greencubes.org/users/{user}',
+			user_url: 'https://api.greencubes.org/users/:user',
 			current_user_url: 'https://api.greencubes.org/user',
 			main_status_url: 'https://api.greencubes.org/main/status',
 			main_economy_url: 'https://api.greencubes.org/main/economy',
