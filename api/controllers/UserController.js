@@ -112,7 +112,7 @@ module.exports = {
 	userInfo: function (req, res) {
 		username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
 		obj = {
-			username: username,
+			username: null,
 			lastseen: {
 				main: null,
 				rpg: null,
@@ -121,12 +121,12 @@ module.exports = {
 			reg_date: null,
 			prefix: null,
 			nick_color: null,
-			skin_url: 'http://greenusercontent.net/mc/skins/' + username + '.png'
+			skin_url: null
 		};
 
 		async.waterfall([
-			function userExists(callback) {
-				gcdbconn.query('SELECT id FROM users WHERE login = ?', [username], function (err, result) {
+			function getUser(callback) {
+				gcdbconn.query('SELECT id, login FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -135,11 +135,13 @@ module.exports = {
 							documentation_url: docs_url
 						});
 					} else {
-						callback(null);
+						obj.username = result[0].login;
+						obj.skin_url = 'http://greenusercontent.net/mc/skins/' + obj.username + '.png';
+						callback(null, obj);
 					}
 				});
 			},
-			function findLastseenMain(callback) {
+			function findLastseenMain(obj, callback) {
 				gcmainconn.query('SELECT UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? limit 1', [username], function (err, result) {
 					if (err) return callback(err);
 
