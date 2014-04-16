@@ -205,11 +205,18 @@ module.exports = {
 						}, function (err, cli) {
 							if (err) return done(err);
 
-							res.render('OAuthLogin', {
-								layout: 'layout',
-								name: cli.name,
-								description: cli.text
-							});
+							if (!cli) {
+								res.json(400, {
+									error: "wrong client_id",
+									documentation_url: docs_url
+								});
+							} else {
+								res.render('OAuthLogin', {
+									layout: 'layout',
+									name: cli.name,
+									description: cli.text
+								});
+							}
 						});
 						return;
 					}
