@@ -9,7 +9,7 @@ module.exports = {
 	
 	currentUserInfo: function (req, res) {
 		if (!req.user) {
-			return res.json({
+			return res.json(403, {
 				message: 'You\'re not logged on',
 				documentation_url: docs_url
 			});
@@ -130,9 +130,9 @@ module.exports = {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
-						callback({
-							show: true,
-							message: 'User not exists'
+						res.json(203, {
+							message: 'User not exists',
+							documentation_url: docs_url
 						});
 					} else {
 						callback(null);
@@ -203,13 +203,6 @@ module.exports = {
 			}
 		], function (err, obj) {
 			if (err) {
-				if (err.show) {
-					return res.json({
-						message: err.message,
-						documentation_url: docs_url
-					});
-				}
-
 				throw err;
 			}
 
