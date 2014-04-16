@@ -24,7 +24,7 @@ module.exports = {
 				];
 
 				if (_.contains(urlExceptions, req.path)) {
-					var ipHeader = req.headers['X-Real-IP'] || '127.0.0.1',
+					var ipHeader = req.headers['x-real-ip'] || '127.0.0.1',
 						ip = (ipHeader !== '127.0.0.1') ? ipHeader.split(',')[0] : ipHeader;
 
 					var obj = {
@@ -68,8 +68,11 @@ module.exports = {
 						next();
 					});
 				} else {
+					var ipHeader = req.headers['x-real-ip'] || '127.0.0.1',
+						ip = (ipHeader !== '127.0.0.1') ? ipHeader.split(',')[0] : ipHeader;
+
 					var limit = new Limiter({
-						id: req.ip,
+						id: ip,
 						db: redis,
 						max: maxReqs
 					});
