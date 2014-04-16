@@ -14,12 +14,13 @@ module.exports = function(req,res,next) {
 	Token.find({
 		token: req.query.access_token
 	}).done(function(err, token) {
-		if (!token.length || token[0].scope) {
+		if (!token.length || !token[0].scope) {
 			return res.status(403).json({
 				message: 'Forbidden. Need authorization',
 				documentation_url: docs_url
 			});
 		}
+
 		passport.authenticate(
 			'bearer',
 			function(err, user, info)
@@ -55,6 +56,11 @@ module.exports = function(req,res,next) {
 				delete req.query.access_token;
 				req.user = user;
 				
+				req.oauth2 = {
+					scopes: scopes,
+					user: user.login
+				};
+
 				return next();
 			}
 		)(req, res);

@@ -278,6 +278,36 @@ module.exports = {
 
 
 			app.post('/oauth/token',
+				function (req, res, next) {
+					if (!req.body.client_id) {
+						res.json(400, {
+							message: "client_id is not defined",
+							documentation_url: docs_url
+						});
+					} else if (!req.body.client_secret) {
+						res.json(400, {
+							message: "client_secret is not defined",
+							documentation_url: docs_url
+						});
+					} else if (!req.body.code) {
+						res.json(400, {
+							message: "code is not defined",
+							documentation_url: docs_url
+						});
+					} else if (!req.body.grant_type) {
+						res.json(400, {
+							message: "grant_type is not defined",
+							documentation_url: docs_url
+						});
+					} else if (!req.body.redirect_uri) {
+						res.json(400, {
+							message: "redirect_uri is not defined",
+							documentation_url: docs_url
+						});
+					} else {
+						next();
+					}
+				},
 				passport.authenticate('oauth2-client-password', {
 					session: false
 				}),

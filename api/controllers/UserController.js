@@ -18,6 +18,7 @@ module.exports = {
 		var username =  req.user.login;
 		var obj = {
 			username: username,
+			email: null,
 			lastseen: {
 				main: null,
 				rpg: null,
@@ -66,9 +67,16 @@ module.exports = {
 					}
 				});
 			},
-			function findRegDate(obj, callback) {
-				gcdbconn.query('SELECT reg_date FROM users WHERE login = ?', [username], function (err, result) {
+			function findRegDateNEmail(obj, callback) {
+				gcdbconn.query('SELECT reg_date, email FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
+
+					if (_.contains(req.oauth2.scopes, 'email')) {
+						obj.email = result[0].email;
+					} else {
+						delete obj.email;
+						delete result[0].email;
+					}
 
 					if (result.length === 0) {
 						callback(null, obj);

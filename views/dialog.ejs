@@ -27,11 +27,19 @@ scripts.push('dialog.js') %>
 				<input name="scope" type="hidden" value="<%= cli.scope %>">
 				<div class="field" style="margin: 0 auto;width: 35%;">
 					<div class="ui list">
-					<% if(_.contains(scopes,'profile')) { %>
+					<% if(_.contains(scopes, 'profile')) { %>
 						<div class="item">
 							<div class="content">
 								<div class="header">Приложение сможет узнать базовую информацию о игроке</div>
 								Последний вход, цвет ника, префикс, скин.
+							</div>
+						</div>
+					<% } %>
+					<% if(_.contains(scopes, 'email')) { %>
+						<div class="item">
+							<div class="content">
+								<div class="header">Приложение сможет узнать твой email</div>
+								У приложения будет доступ к твоему email, обычно это нужно для почтовых рассылок.
 							</div>
 						</div>
 					<% } %>
