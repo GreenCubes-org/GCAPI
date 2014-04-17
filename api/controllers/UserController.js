@@ -119,6 +119,14 @@ module.exports = {
 
 	userInfo: function (req, res) {
 		username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
+
+		if (username !== req.params.user) {
+			res.json(203, {
+				message: 'User not exists',
+				documentation_url: docs_url
+			});
+		}
+
 		obj = {
 			username: null,
 			lastseen: {
