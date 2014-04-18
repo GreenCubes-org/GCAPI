@@ -11,6 +11,9 @@ var local = require('./local.js');
 
 module.exports.bootstrap = function (cb) {
 	// Init globals
+
+	global.gcdb = require('../utils/gcdb');
+
 	global.docs_url = local.docs_url || 'https://wiki.greencubes.org/API';
 
 	global.mysql = require('mysql');
