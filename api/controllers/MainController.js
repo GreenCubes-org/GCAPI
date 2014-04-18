@@ -80,12 +80,12 @@ module.exports = {
 						return callback(null, element);
 					}
 
-					gcdb.user.getByID(element.pioneer, function(err, result) {
+					gcdb.user.getByID(element.pioneer, 'maindb', function(err, result) {
 						if (err) return callback(err);
 
 						element.pioneer = result;
 
-						gcdb.user.getByID(element.secondPioneer, function(err, result) {
+						gcdb.user.getByID(element.secondPioneer, 'maindb', function(err, result) {
 							if (err) return callback(err);
 
 							element.secondPioneer = result;
@@ -126,12 +126,12 @@ module.exports = {
 						return callback(null, element);
 					}
 
-					gcdb.user.getByID(element.pioneer, function(err, result) {
+					gcdb.user.getByID(element.pioneer, 'maindb', function(err, result) {
 						if (err) return callback(err);
 
 						element.pioneer = result;
 
-						gcdb.user.getByID(element.secondPioneer, function(err, result) {
+						gcdb.user.getByID(element.secondPioneer, 'maindb', function(err, result) {
 							if (err) return callback(err);
 
 							element.secondPioneer = result;
