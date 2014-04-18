@@ -99,6 +99,70 @@ module.exports = {
 						callback(null, obj);
 					}
 				});
+			},
+			function serializeNickColor(obj, callback) {
+				switch (obj.nick_color) {
+					case 'a':
+						obj.nick_color = '55ff55';
+						break;
+
+					case 'b':
+						obj.nick_color = '55ffff';
+						break;
+
+					case 'c':
+						obj.nick_color = 'ff5555';
+						break;
+
+					case 'd':
+						obj.nick_color = 'ff55ff';
+						break;
+
+					case 'e':
+						obj.nick_color = 'ffff55';
+						break;
+
+					case '1':
+						obj.nick_color = '0000aa';
+						break;
+
+					case '2':
+						obj.nick_color = '00aa00';
+						break;
+
+					case '3':
+						obj.nick_color = '00aaaa';
+						break;
+
+					case '4':
+						obj.nick_color = 'aa0000';
+						break;
+
+					case '5':
+						obj.nick_color = 'aa00aa';
+						break;
+
+					case '6':
+						obj.nick_color = 'ffaa00';
+						break;
+
+					case '7':
+						obj.nick_color = 'aaaaaa';
+						break;
+
+					case '8':
+						obj.nick_color = '555555';
+						break;
+
+					case '9':
+						obj.nick_color = '5555ff';
+						break;
+
+					default:
+						break;
+				}
+
+				return callback(null, obj);
 			}
 		], function (err, obj) {
 			if (err) {
@@ -218,6 +282,70 @@ module.exports = {
 						callback(null, obj);
 					}
 				});
+			},
+			function serializeNickColor(obj, callback) {
+				switch (obj.nick_color) {
+					case 'a':
+						obj.nick_color = '55ff55';
+						break;
+
+					case 'b':
+						obj.nick_color = '55ffff';
+						break;
+
+					case 'c':
+						obj.nick_color = 'ff5555';
+						break;
+
+					case 'd':
+						obj.nick_color = 'ff55ff';
+						break;
+
+					case 'e':
+						obj.nick_color = 'ffff55';
+						break;
+
+					case '1':
+						obj.nick_color = '0000aa';
+						break;
+
+					case '2':
+						obj.nick_color = '00aa00';
+						break;
+
+					case '3':
+						obj.nick_color = '00aaaa';
+						break;
+
+					case '4':
+						obj.nick_color = 'aa0000';
+						break;
+
+					case '5':
+						obj.nick_color = 'aa00aa';
+						break;
+
+					case '6':
+						obj.nick_color = 'ffaa00';
+						break;
+
+					case '7':
+						obj.nick_color = 'aaaaaa';
+						break;
+
+					case '8':
+						obj.nick_color = '555555';
+						break;
+
+					case '9':
+						obj.nick_color = '5555ff';
+						break;
+
+					default:
+						break;
+				}
+
+				return callback(null, obj);
 			}
 		], function (err, obj) {
 			if (err) {
