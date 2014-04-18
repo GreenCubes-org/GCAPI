@@ -162,10 +162,6 @@ module.exports = {
 						break;
 				}
 
-				if (obj.nick_color.length === 9) {
-					obj.nick_color = obj.nick_color.substr(3,6);
-				}
-
 				return callback(null, obj);
 			}
 		], function (err, obj) {
@@ -347,10 +343,6 @@ module.exports = {
 
 					default:
 						break;
-				}
-
-				if (obj.nick_color.length === 9) {
-					obj.nick_color = obj.nick_color.substr(3,6);
 				}
 
 				callback(null, obj);
