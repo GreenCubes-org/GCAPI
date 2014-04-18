@@ -103,63 +103,67 @@ module.exports = {
 			function serializeNickColor(obj, callback) {
 				switch (obj.nick_color) {
 					case 'a':
-						obj.nick_color = '55ff55';
+						obj.nick_color = 'rff55ff55';
 						break;
 
 					case 'b':
-						obj.nick_color = '55ffff';
+						obj.nick_color = 'rff55ffff';
 						break;
 
 					case 'c':
-						obj.nick_color = 'ff5555';
+						obj.nick_color = 'rffff5555';
 						break;
 
 					case 'd':
-						obj.nick_color = 'ff55ff';
+						obj.nick_color = 'rffff55ff';
 						break;
 
 					case 'e':
-						obj.nick_color = 'ffff55';
+						obj.nick_color = 'rffffff55';
 						break;
 
 					case '1':
-						obj.nick_color = '0000aa';
+						obj.nick_color = 'rff0000aa';
 						break;
 
 					case '2':
-						obj.nick_color = '00aa00';
+						obj.nick_color = 'rff00aa00';
 						break;
 
 					case '3':
-						obj.nick_color = '00aaaa';
+						obj.nick_color = 'rff00aaaa';
 						break;
 
 					case '4':
-						obj.nick_color = 'aa0000';
+						obj.nick_color = 'rffaa0000';
 						break;
 
 					case '5':
-						obj.nick_color = 'aa00aa';
+						obj.nick_color = 'rffaa00aa';
 						break;
 
 					case '6':
-						obj.nick_color = 'ffaa00';
+						obj.nick_color = 'rffffaa00';
 						break;
 
 					case '7':
-						obj.nick_color = 'aaaaaa';
+						obj.nick_color = 'rffaaaaaa';
 						break;
 
 					case '8':
-						obj.nick_color = '555555';
+						obj.nick_color = 'rff555555';
 						break;
 
 					case '9':
-						obj.nick_color = '5555ff';
+						obj.nick_color = 'rff5555ff';
 						break;
 
 					default:
 						break;
+				}
+
+				if (obj.nick_color.length === 9) {
+					obj.nick_color = obj.nick_color.substr(3,6);
 				}
 
 				return callback(null, obj);
@@ -286,66 +290,70 @@ module.exports = {
 			function serializeNickColor(obj, callback) {
 				switch (obj.nick_color) {
 					case 'a':
-						obj.nick_color = '55ff55';
+						obj.nick_color = 'rff55ff55';
 						break;
 
 					case 'b':
-						obj.nick_color = '55ffff';
+						obj.nick_color = 'rff55ffff';
 						break;
 
 					case 'c':
-						obj.nick_color = 'ff5555';
+						obj.nick_color = 'rffff5555';
 						break;
 
 					case 'd':
-						obj.nick_color = 'ff55ff';
+						obj.nick_color = 'rffff55ff';
 						break;
 
 					case 'e':
-						obj.nick_color = 'ffff55';
+						obj.nick_color = 'rffffff55';
 						break;
 
 					case '1':
-						obj.nick_color = '0000aa';
+						obj.nick_color = 'rff0000aa';
 						break;
 
 					case '2':
-						obj.nick_color = '00aa00';
+						obj.nick_color = 'rff00aa00';
 						break;
 
 					case '3':
-						obj.nick_color = '00aaaa';
+						obj.nick_color = 'rff00aaaa';
 						break;
 
 					case '4':
-						obj.nick_color = 'aa0000';
+						obj.nick_color = 'rffaa0000';
 						break;
 
 					case '5':
-						obj.nick_color = 'aa00aa';
+						obj.nick_color = 'rffaa00aa';
 						break;
 
 					case '6':
-						obj.nick_color = 'ffaa00';
+						obj.nick_color = 'rffffaa00';
 						break;
 
 					case '7':
-						obj.nick_color = 'aaaaaa';
+						obj.nick_color = 'rffaaaaaa';
 						break;
 
 					case '8':
-						obj.nick_color = '555555';
+						obj.nick_color = 'rff555555';
 						break;
 
 					case '9':
-						obj.nick_color = '5555ff';
+						obj.nick_color = 'rff5555ff';
 						break;
 
 					default:
 						break;
 				}
 
-				return callback(null, obj);
+				if (obj.nick_color.length === 9) {
+					obj.nick_color = obj.nick_color.substr(3,6);
+				}
+
+				callback(null, obj);
 			}
 		], function (err, obj) {
 			if (err) {
