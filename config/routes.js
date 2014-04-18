@@ -30,6 +30,8 @@ module.exports.routes = {
 	/* GC.Main section */
 	'/main/status': 'main.status',
 	'/main/economy': 'main.economy',
+	'/main/named_colors': 'main.namedColorsJSON',
+	'/main/named_colors/html': 'main.namedColorsHTML',
 
 	/* GC.RPG section */
 	'/rpg/status': 'rpg.status',

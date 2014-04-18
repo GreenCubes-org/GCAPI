@@ -1,0 +1,52 @@
+<% title = 'Таблица именованных цветов';
+styles.push('namedcolors.css') %>
+
+<h1 style="text-align:center;">Таблица именованных цветов</h1>
+<table>
+	<thead>
+		<tr>
+			<td>Название</td>
+			<td>Название на русском</td>
+			<td>Цветовой тон (h)</td>
+			<td>Насыщенность (s)</td>
+			<td>Первооткрыватель</td>
+			<td>Время первого открытия</td>
+			<td>Второй открыватель</td>
+			<td>Время второго открытия</td>
+		</tr>
+	</thead>
+	<% obj.forEach(function (element) { %>
+	<tbody>
+		<tr>
+			<td id="small"><%- element.name %></td>
+			<td><%- element.localizedName %></td>
+			<td><%- element.h %></td>
+			<td><%- element.s %></td>
+			<% if (element.pioneer === "System color") { %>
+				<td>Системный цвет</td>
+			<% } else if (element.pioneer) { %>
+				<td><%- element.pioneer %></td>
+			<% } else { %>
+				<td>&mdash;</td>
+			<% } %>
+			<% if (element.opened) { %>
+				<td id="small"><%- moment(element.opened).format('D MMM YYYY, h:mm') %></td>
+			<% } else { %>
+				<td id="small">&mdash;</td>
+			<% } %>
+			<% if (element.secondPioneer === "System color") { %>
+				<td>Системный цвет</td>
+			<% } else if (element.secondPioneer) { %>
+				<td><%- element.secondPioneer %></td>
+			<% } else { %>
+				<td>&mdash;</td>
+			<% } %>
+			<% if (element.repeated) { %>
+				<td id="small"><%- moment(element.repeated).format('D MMM YYYY, h:mm') %></td>
+			<% } else { %>
+				<td id="small">&mdash;</td>
+			<% } %>
+		</tr>
+	</tbody>
+	<% }) %>
+</table>

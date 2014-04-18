@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-Regular.eot");
+  src: url("/fonts/ClearSans-Regular.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-Regular.ttf") format("truetype"),
+       url("/fonts/ClearSans-Regular.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-Italic.eot");
+  src: url("/fonts/ClearSans-Italic.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-Italic.ttf") format("truetype"),
+       url("/fonts/ClearSans-Italic.woff") format("woff");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-Bold.eot");
+  src: url("/fonts/ClearSans-Bold.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-Bold.ttf") format("truetype"),
+       url("/fonts/ClearSans-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url("/fonts/ClearSans-BoldItalic.eot");
+  src: url("/fonts/ClearSans-BoldItalic.eot#iefix") format("embedded-opentype"),
+       url("/fonts/ClearSans-BoldItalic.ttf") format("truetype"),
+       url("/fonts/ClearSans-BoldItalic.woff") format("woff");
+  font-style: italic;
+  font-weight: 700;
+}
+
+body {
+	font-family: "Clear Sans","Helvetica Neue",sans-serif !important;
+	color: rgb(85, 85, 85);
+	margin: 0px;
+}
+
+thead {
+	font-weight: bold;
+}
+
+#small {
+	font-size: 14px;
+}

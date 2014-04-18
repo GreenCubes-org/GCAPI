@@ -1,7 +1,7 @@
 {
   "name": "GC.API",
   "private": true,
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "GreenCubes API",
   "dependencies": {
     "sails": "0.9.x",
@@ -20,7 +20,8 @@
     "passport-http-bearer": "~1.0.1",
     "passport-http": "~0.2.2",
     "passport-oauth2-client-password": "~0.1.1",
-    "passport-local": "~1.0.0"
+    "passport-local": "~1.0.0",
+	"moment": "2.4.*"
   },
   "scripts": {
     "start": "node app.js",

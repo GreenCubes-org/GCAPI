@@ -6,6 +6,10 @@
  */
 var net = require('net');
 
+
+var moment = require('moment');
+moment.lang('ru');
+
 module.exports = {
 
 	status: function (req, res) {
@@ -54,5 +58,99 @@ module.exports = {
 
 	economy: function (req, res) {
 		res.redirect('https://greencubes.org/api.php?type=economy');
+	},
+
+	namedColorsJSON: function (req, res) {
+		async.waterfall([
+			function getNamedColors(callback) {
+				var query = 'SELECT name, localizedName, h, s, pioneer, opened, secondPioneer, repeated FROM `named_colors`';
+
+				gcmainconn.query(query, function (err, result) {
+					if (err) return callback(err);
+
+					callback(null, result);
+				});
+			},
+			function setLogins(obj, callback) {
+				async.map(obj, function(element, callback) {
+					if (element.pioneer === -1) {
+						element.pioneer = "System color";
+						element.secondPioneer = "System color";
+
+						return callback(null, element);
+					}
+
+					gcdb.user.getByID(element.pioneer, function(err, result) {
+						if (err) return callback(err);
+
+						element.pioneer = result;
+
+						gcdb.user.getByID(element.secondPioneer, function(err, result) {
+							if (err) return callback(err);
+
+							element.secondPioneer = result;
+
+							callback(null, element);
+						});
+					});
+				}, function(err, obj) {
+					if (err) return callback(err);
+
+					callback(null, obj);
+				});
+			}
+		], function (err, obj) {
+			if (err) throw err;
+
+			res.json(obj);
+		});
+	},
+
+	namedColorsHTML: function (req, res) {
+		async.waterfall([
+			function getNamedColors(callback) {
+				var query = 'SELECT name, localizedName, h, s, pioneer, opened, secondPioneer, repeated FROM `named_colors`';
+
+				gcmainconn.query(query, function (err, result) {
+					if (err) return callback(err);
+
+					callback(null, result);
+				});
+			},
+			function setLogins(obj, callback) {
+				async.map(obj, function(element, callback) {
+					if (element.pioneer === -1) {
+						element.pioneer = "System color";
+						element.secondPioneer = "System color";
+
+						return callback(null, element);
+					}
+
+					gcdb.user.getByID(element.pioneer, function(err, result) {
+						if (err) return callback(err);
+
+						element.pioneer = result;
+
+						gcdb.user.getByID(element.secondPioneer, function(err, result) {
+							if (err) return callback(err);
+
+							element.secondPioneer = result;
+							callback(null, element);
+						});
+					});
+				}, function(err, obj) {
+					if (err) return callback(err);
+
+					callback(null, obj);
+				});
+			}
+		], function (err, obj) {
+			if (err) throw err;
+
+			res.view('namedColors', {
+				obj: obj,
+				moment: moment
+			});
+		});
 	}
 };
