@@ -43,7 +43,9 @@ body {
 	color: rgb(85, 85, 85);
 	margin: 0px;
 }
-
+table {
+	margin: 0px auto;
+}
 thead {
 	font-weight: bold;
 }
