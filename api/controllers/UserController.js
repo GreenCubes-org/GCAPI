@@ -279,6 +279,17 @@ module.exports = {
 					}
 				});
 			},
+			function preStatusCheck(obj, callback) {
+				if (_.contains(cfg.userStatusException, obj.username)) {
+					obj.status.main = false;
+					obj.status.rpg = false;
+					obj.status.apocalyptic = false;
+
+					callback(null, obj);
+				} else {
+					callback(null, obj);
+				}
+			},
 			function findLastseenMain(obj, callback) {
 				gcmainconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
@@ -289,7 +300,7 @@ module.exports = {
 					} else {
 						if (!result[0].exit) {
 							gcapi.srv.getStatus(cfg.srv.main, function(online) {
-								if (online) {
+								if (obj.status.main !== false && online) {
 									obj.status.main = true;
 								} else {
 									obj.status.main = false;
@@ -317,7 +328,7 @@ module.exports = {
 					} else {
 						if (!result[0].exit) {
 							gcapi.srv.getStatus(cfg.srv.rpg, function(online) {
-								if (online) {
+								if (obj.status.rpg !== false && online) {
 									obj.status.rpg = true;
 								} else {
 									obj.status.rpg = false;
@@ -345,7 +356,7 @@ module.exports = {
 					} else {
 						if (!result[0].exit) {
 							gcapi.srv.getStatus(cfg.srv.apocalyptic, function(online) {
-								if (online) {
+								if (obj.status.apocalyptic !== false && online) {
 									obj.status.apocalyptic = true;
 								} else {
 									obj.status.apocalyptic = false;

@@ -19,6 +19,27 @@ module.exports = {
 	//Session secret
 	secret: 'RANDOMLOGSTRINGLOGNERTHANTHIS', //Make it pure random
 
+	userStatusException: [
+		'Drbadnick',
+		'Xitaly',
+		'Cardinal',
+		'Messiah7',
+		'Satanuga',
+		'FarhanLester',
+		'Kunik',
+		'Panty',
+		'nzh',
+		'PoKka',
+		'Imhotep',
+		'MasterToma',
+		'Kernel',
+		'MushroomKiller',
+		'MushrO_om',
+		'tort32',
+		'Rena4ka',
+		'Feyola'
+	],
+
 	// Servers hosts and ports.
 	srv: {
 		main: {
