@@ -20,6 +20,29 @@ module.exports.bootstrap = function (cb) {
 	global.mysql = require('mysql');
 	global.cfg = require('./local.js');
 
+	if (!cfg.userStatusException) {
+		global.cfg.userStatusException = [
+			'Drbadnick',
+			'Xitaly',
+			'Cardinal',
+			'Messiah7',
+			'Satanuga',
+			'FarhanLester',
+			'Kunik',
+			'Panty',
+			'nzh',
+			'PoKka',
+			'Imhotep',
+			'MasterToma',
+			'Kernel',
+			'MushroomKiller',
+			'MushrO_om',
+			'tort32',
+			'Rena4ka',
+			'Feyola'
+		];
+	}
+
 	global.redis = require('redis').createClient();
 	if (cfg.redis.pass) redis.auth(cfg.redis.pass);
 	redis.select(cfg.redis.db.limit);
