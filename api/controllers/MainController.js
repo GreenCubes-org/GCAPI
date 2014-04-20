@@ -53,7 +53,7 @@ module.exports = {
 	namedColorsJSON: function (req, res) {
 		async.waterfall([
 			function getNamedColors(callback) {
-				var query = 'SELECT name, localizedName, h, s, pioneer, opened, secondPioneer, repeated FROM `named_colors`';
+				var query = 'SELECT name, localizedName, h, s, pioneer, UNIX_TIMESTAMP(opened) AS opened, secondPioneer, UNIX_TIMESTAMP(repeated) AS repeated FROM `named_colors`';
 
 				gcmainconn.query(query, function (err, result) {
 					if (err) return callback(err);
