@@ -1,6 +1,6 @@
 var net = require('net');
 
-module.exports = srv = {
+module.exports.srv = srv = {
 
 	getStatus: function getStatus(srvCfg, cb) {
 		var sock = new net.Socket();
