@@ -4,8 +4,6 @@
  * @module		:: Controller
  * @description	:: GC.Main API.
  */
-var net = require('net');
-
 
 var moment = require('moment');
 moment.lang('ru');
@@ -21,19 +19,11 @@ module.exports = {
 
 		async.waterfall([
 			function getServerStatus(callback) {
-				var sock = new net.Socket();
-				sock.setTimeout(500);
-				sock.on('connect', function() {
-					sock.destroy();
-
-					obj.status = true;
+				gcapi.srv.getStatus(cfg.srv.main, function(online) {
+					obj.status = online;
 
 					callback(null, obj);
-				}).on('error', function(e) {
-					obj.status = false;
-
-					callback({ show: true }, obj);
-				}).connect(cfg.srv.main.port, cfg.srv.main.host);
+				});
 			},
 			function getPlayersCount(obj, callback) {
 				gcmainconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {

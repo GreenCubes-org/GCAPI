@@ -4,7 +4,7 @@
  * @module		:: Controller
  * @description	:: GC.Apocalyptic API.
  */
-var net = require('net');
+
 
 module.exports = {
 
@@ -17,19 +17,11 @@ module.exports = {
 
 		async.waterfall([
 			function getServerStatus(callback) {
-				var sock = new net.Socket();
-				sock.setTimeout(500);
-				sock.on('connect', function() {
-					sock.destroy();
-
-					obj.status = true;
+				gcapi.srv.getStatus(cfg.srv.apocalyptic, function(online) {
+					obj.status = online;
 
 					callback(null, obj);
-				}).on('error', function(e) {
-					obj.status = false;
-
-					callback({ show: true }, obj);
-				}).connect(cfg.srv.apocalyptic.port, cfg.srv.apocalyptic.host);
+				});
 			},
 			function getPlayersCount(obj, callback) {
 				gcapoconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {
