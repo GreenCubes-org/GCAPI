@@ -13,6 +13,7 @@ module.exports.bootstrap = function (cb) {
 	// Init globals
 
 	global.gcdb = require('../utils/gcdb');
+	global.gcapi = reuqire('../utils/gcapi');
 
 	global.docs_url = local.docs_url || 'https://wiki.greencubes.org/API';
 
