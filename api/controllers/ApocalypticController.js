@@ -42,5 +42,28 @@ module.exports = {
 
 			res.json(obj);
 		});
-	}
+	},
+
+	online: function (req, res) {
+		var obj = [];
+
+		gcapoconn.query('SELECT login FROM login_log WHERE `exit` IS NULL ORDER BY login ASC', function (err, result) {
+			if (err) throw err;
+
+			if (result.length === 0) {
+				res.json(obj);
+			} else {
+				async.each(result, function (element, callback) {
+					if (!(_.contains(cfg.userStatusException, element.login))) {
+						obj.push(element.login);
+					}
+
+					callback(null);
+				}, function () {
+					res.json(obj);
+				});
+
+			}
+		});
+	},
 };

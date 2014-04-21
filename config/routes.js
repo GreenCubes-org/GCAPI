@@ -29,14 +29,17 @@ module.exports.routes = {
 
 	/* GC.Main section */
 	'/main/status': 'main.status',
+	'/main/online': 'main.online',
 	'/main/economy': 'main.economy',
 	'/main/named_colors': 'main.namedColorsJSON',
 	'/main/named_colors/html': 'main.namedColorsHTML',
 
 	/* GC.RPG section */
 	'/rpg/status': 'rpg.status',
+	'/rpg/online': 'rpg.online',
 
 	/* GC.Apocalyptic section */
-	'/apocalyptic/status': 'apocalyptic.status'
+	'/apocalyptic/status': 'apocalyptic.status',
+	'/apocalyptic/online': 'apocalyptic.online'
 
 };
