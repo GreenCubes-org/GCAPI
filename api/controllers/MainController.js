@@ -170,7 +170,7 @@ module.exports = {
 	items: function (req, res) {
 		async.waterfall([
 			function getNamedColors(callback) {
-				var query = 'SELECT `id`, `data` AS `index`, `name`, `image` FROM `items`';
+				var query = 'SELECT `id`, `data`, `name`, `image` FROM `items`';
 
 				maindbconn.query(query, function (err, result) {
 					if (err) return callback(err);
