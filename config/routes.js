@@ -33,6 +33,7 @@ module.exports.routes = {
 	'/main/economy': 'main.economy',
 	'/main/named_colors': 'main.namedColorsJSON',
 	'/main/named_colors/html': 'main.namedColorsHTML',
+	'/main/items': 'main.items',
 
 	/* GC.RPG section */
 	'/rpg/status': 'rpg.status',

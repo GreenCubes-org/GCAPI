@@ -165,5 +165,23 @@ module.exports = {
 				moment: moment
 			});
 		});
+	},
+
+	items: function (req, res) {
+		async.waterfall([
+			function getNamedColors(callback) {
+				var query = 'SELECT `id`, `data` AS `index`, `name`, `image` FROM `items`';
+
+				maindbconn.query(query, function (err, result) {
+					if (err) return callback(err);
+
+					callback(null, result);
+				});
+			}
+		], function (err, obj) {
+			if (err) throw err;
+
+			res.json(obj);
+		});
 	}
 };
