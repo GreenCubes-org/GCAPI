@@ -169,11 +169,21 @@ module.exports = {
 
 	items: function (req, res) {
 		async.waterfall([
-			function getNamedColors(callback) {
-				var query = 'SELECT `id`, `data`, `name`, `image` FROM `items`';
+			function getItems(callback) {
+				var query = 'SELECT `id`, `data`, `name`, `image` AS `image_url` FROM `items`';
 
 				maindbconn.query(query, function (err, result) {
 					if (err) return callback(err);
+
+					callback(null, result);
+				});
+			},
+			function serializeItems(obj, callback) {
+				async.map(obj, function (element, callback) {
+					element.image_url = 'https://greencubes.org/img/items/' + element.image_url;
+
+					callback(null, element);
+				}, function (err, result) {
 
 					callback(null, result);
 				});
