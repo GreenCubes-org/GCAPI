@@ -3,7 +3,7 @@
  */
 module.exports = function (req, res, ok) {
 
-	var username = req.user.login || req.user.username;
+	var username = (req.user) ? req.user.login || req.user.username : null;
 
 	if (_.contains(cfg.OAuthAdmins, username)) {
 		ok();
