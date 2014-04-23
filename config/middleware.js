@@ -213,7 +213,12 @@ module.exports = {
 									error: "wrong client_id",
 									documentation_url: docs_url
 								});
-							} else {
+							} else if (cli.redirectURI !== req.query.redirect_uri) {
+								res.json(400, {
+									error: "wrong redirect_uri",
+									documentation_url: docs_url
+								});
+							} else{
 								res.render('OAuthLogin', {
 									layout: 'layout',
 									name: cli.name,
