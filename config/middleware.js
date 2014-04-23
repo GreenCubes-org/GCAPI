@@ -111,7 +111,7 @@ module.exports = {
 
 			var server = oauth2orize.createServer();
 			server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, done) {
-				var code = gct.generateUID(32);
+				var code = gcapi.generateUID(32);
 				Authcode.create({
 					code: code,
 					clientId: client.id,
@@ -144,7 +144,7 @@ module.exports = {
 						return done(null, false);
 					}
 
-					var token = gct.generateUID(256);
+					var token = gcapi.generateUID(256);
 					Token.create({
 						token: token,
 						userId: code.userId,
