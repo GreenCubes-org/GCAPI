@@ -19,6 +19,10 @@ module.exports.routes = {
 	'get /login': 'auth.loginTpl',
 	'/logout': 'auth.logout',
 
+	/* OAuth applications admin API */
+	'/oauth/admin/list_apps': 'oauth.listApps',
+	'post /oauth/admin/register_app': 'oauth.registerApp',
+
 	/* Misc API (lolwhat) */
 	'/meta': 'misc.info',
 	'/rate_limit': 'misc.rateLimit',
