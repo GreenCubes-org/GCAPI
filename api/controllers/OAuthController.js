@@ -57,19 +57,23 @@ module.exports = {
 			});
 		}
 
-		var clientSecret = gcapi.generateUID(64);
-
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
-			Client.create({
-				name: req.body.name,
-				clientSecret: clientSecret,
-				redirectURI: req.body.redirectURI,
-				homeURI: req.body.homeURI,
-				owner: uid,
-				scope: req.body.scope,
-				description: req.body.description
+			Client.findOrCreate({
+				name: req.body.name
 			}).done(function (err, client) {
 				if (err) throw err;
+
+				client.name = req.body.name;
+				if (!client.clientSecret) {
+					client.clientSecret = gcapi.generateUID(64);
+				} else if (req.body.generateSecret) {
+					client.clientSecret = gcapi.generateUID(64);
+				}
+				client.redirectURI = req.body.redirectURI;
+				client.homeURI = req.body.homeURI;
+				client.owner = uid;
+				client.scope = req.body.scope;
+				client.description = req.body.description;
 
 				res.json({
 					message: "Success",
