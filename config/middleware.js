@@ -1,8 +1,7 @@
 var Limiter = require('ratelimiter'),
 	passport = require('passport'),
 	oauth2orize = require('oauth2orize'),
-	login = require('connect-ensure-login'),
-	utils = require('../utils.js');
+	login = require('connect-ensure-login')
 
 module.exports = {
 	express: {
@@ -112,7 +111,7 @@ module.exports = {
 
 			var server = oauth2orize.createServer();
 			server.grant(oauth2orize.grant.code(function (client, redirectURI, user, ares, done) {
-				var code = utils.uid(32);
+				var code = gct.generateUID(32);
 				Authcode.create({
 					code: code,
 					clientId: client.id,
@@ -145,7 +144,7 @@ module.exports = {
 						return done(null, false);
 					}
 
-					var token = utils.uid(256);
+					var token = gct.generateUID(256);
 					Token.create({
 						token: token,
 						userId: code.userId,
