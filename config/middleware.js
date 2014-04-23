@@ -241,13 +241,18 @@ module.exports = {
 						if (!cli) {
 							return done(null, false);
 						}
-						if (cli.redirectURI != redirectURI) {
-							return done(null, false);
-						}
+
 						return done(null, cli, cli.redirectURI);
 					});
 				}),
 				function (req, res) {
+					if (req.oauth2.client.redirectURI !== req.oauth2.req.redirectURI) {
+						return res.json(400, {
+							error: "wrong redirect_uri",
+							documentation_url: docs_url
+						});
+					}
+
 					var scopes;
 					if (req.oauth2.client.scope.split(',') === req.oauth2.client.scope) {
 						scopes = req.oauth2.client.scope
