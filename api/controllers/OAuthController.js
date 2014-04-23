@@ -58,8 +58,72 @@ module.exports = {
 		}
 
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
-			Client.findOrCreate({
-				name: req.body.name
+			Client.create({
+				name: req.body.name,
+				clientSecret: gcapi.generateUID(64),
+				redirectURI: req.body.redirectURI,
+				homeURI: req.body.homeURI,
+				owner: uid,
+				scope: req.body.scope,
+				description: req.body.description
+			}).done(function (err, client) {
+				if (err) throw err;
+
+				gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
+					if (err) throw err;
+
+					client.owner = login;
+					res.json({
+						message: "Success",
+						client: client
+					});
+				});
+			});
+		});
+	},
+
+	editApp: function (req, res) {
+
+		if (!req.body.name) {
+			return res.json(400, {
+				error: "name is not defined",
+				documentation_url: docs_url
+			});
+		}
+		if (!req.body.redirectURI) {
+			return res.json(400, {
+				error: "redirectURI is not defined",
+				documentation_url: docs_url
+			});
+		}
+		if (!req.body.homeURI) {
+			return res.json(400, {
+				error: "homeURI is not defined",
+				documentation_url: docs_url
+			});
+		}
+		if (!req.body.owner) {
+			return res.json(400, {
+				error: "owner is not defined",
+				documentation_url: docs_url
+			});
+		}
+		if (!req.body.description) {
+			return res.json(400, {
+				error: "description is not defined",
+				documentation_url: docs_url
+			});
+		}
+		if (!req.body.scope) {
+			return res.json(400, {
+				error: "scope is not defined",
+				documentation_url: docs_url
+			});
+		}
+
+		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
+			Client.findOne({
+				id: parseInt(req.params.id, 10)
 			}).done(function (err, client) {
 				if (err) throw err;
 
@@ -75,11 +139,65 @@ module.exports = {
 				client.scope = req.body.scope;
 				client.description = req.body.description;
 
-				res.json({
-					message: "Success",
-					client: client
+				client.save(function (err) {
+					if (err) throw err;
+
+					gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
+						if (err) throw err;
+
+						client.owner = login;
+						res.json({
+							message: "Success",
+							client: client
+						});
+					});
 				});
 			});
+		});
+	},
+
+	getApp: function (req, res) {
+		Client.findOne({
+			id: parseInt(req.params.id, 10)
+		}).done(function (err, client) {
+			if (err) throw err;
+
+			if (!client) {
+				res.json(400, {
+					message: 'wrong id',
+					documentation_url: docs_url
+				})
+			} else {
+				gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
+					if (err) throw err;
+
+					client.owner = login;
+					res.json(client);
+				});
+			}
+		});
+	},
+
+	deleteApp: function (req, res) {
+		Client.findOne({
+			id: parseInt(req.params.id, 10)
+		}).done(function (err, client) {
+			if (err) throw err;
+
+			if (client.length === 0) {
+				return res.json(400, {
+					message: 'wrong id',
+					documentation_url: docs_url
+				})
+			} else {
+				client.destroy(function(err) {
+					if (err) throw err;
+
+					res.json({
+						message: "Success"
+					});
+				});
+			}
 		});
 	}
 };

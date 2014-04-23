@@ -20,8 +20,11 @@ module.exports.routes = {
 	'/logout': 'auth.logout',
 
 	/* OAuth applications admin API */
-	'/oauth/admin/list_apps': 'oauth.listApps',
-	'post /oauth/admin/register_app': 'oauth.registerApp',
+	'get /oauth/apps': 'oauth.listApps',
+	'post /oauth/apps/new': 'oauth.registerApp',
+	'get /oauth/apps/:id': 'oauth.getApp',
+	'put /oauth/apps/:id': 'oauth.editApp',
+	'delete /oauth/apps/:id': 'oauth.deleteApp',
 
 	/* Misc API (lolwhat) */
 	'/meta': 'misc.info',
