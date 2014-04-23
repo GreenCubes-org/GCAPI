@@ -19,5 +19,9 @@ module.exports.policies = {
 	'User': {
 		'*': true,
 		'currentUserInfo': 'scopeProfile'
+	},
+
+	'OAuth': {
+		'*': 'isAdmin'
 	}
 };
