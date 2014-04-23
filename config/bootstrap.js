@@ -43,6 +43,14 @@ module.exports.bootstrap = function (cb) {
 		];
 	}
 
+	if (!cfg.OAuthAdmins) {
+		global.cfg.OAuthAdmins = [
+			'Kernel',
+			'Rena4ka',
+			'Feyola'
+		];
+	}
+
 	global.redis = require('redis').createClient();
 	if (cfg.redis.pass) redis.auth(cfg.redis.pass);
 	redis.select(cfg.redis.db.limit);
