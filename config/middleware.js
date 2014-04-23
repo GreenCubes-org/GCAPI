@@ -202,7 +202,8 @@ module.exports = {
 						});
 						return;
 					}
-					if (!req.isAuthenticated()) {
+					if (!req.isAuthenticated() && !req.oauth2) {
+						req.logout();
 						Client.findOne({
 							id: parseInt(req.query.client_id)
 						}, function (err, cli) {
@@ -217,7 +218,7 @@ module.exports = {
 								res.render('OAuthLogin', {
 									layout: 'layout',
 									name: cli.name,
-									description: cli.text
+									description: cli.description
 								});
 							}
 						});

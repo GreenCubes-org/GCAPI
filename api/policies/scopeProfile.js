@@ -4,6 +4,11 @@
 var passport = require('passport');
 
 module.exports = function(req,res,next) {
+
+	if (req.user) {
+		return next();
+	}
+
 	if (!req.query.access_token) {
 		return res.status(403).json({
 			message: 'Forbidden. Need authorization',

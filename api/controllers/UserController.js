@@ -15,7 +15,7 @@ module.exports = {
 			});
 		}
 
-		var username =  req.user.login;
+		var username =  req.user.login || req.user.username;
 		var obj = {
 			username: username,
 			email: null,
@@ -36,7 +36,7 @@ module.exports = {
 		};
 
 		async.waterfall([
-			function findLastseenMain(obj, callback) {
+			function findLastseenMain(callback) {
 				gcmainconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
 
@@ -124,7 +124,7 @@ module.exports = {
 				gcdbconn.query('SELECT reg_date, email FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
-					if (_.contains(req.oauth2.scopes, 'email')) {
+					if (!req.oauth2 || _.contains(req.oauth2.scopes, 'email')) {
 						obj.email = result[0].email;
 					} else {
 						delete obj.email;
