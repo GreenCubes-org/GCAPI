@@ -40,7 +40,7 @@ module.exports = {
 			required: true
 		},
 
-		text: {
+		description: {
 			type: 'STRING',
 			required: true
 		}
