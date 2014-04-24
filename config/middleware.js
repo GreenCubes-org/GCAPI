@@ -287,7 +287,7 @@ module.exports = {
 			});
 
 
-			app.post('/oauth/token',
+			app.post('/oauth/access_token',
 				function (req, res, next) {
 					if (!req.body.client_id) {
 						res.json(400, {
