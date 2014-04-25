@@ -29,7 +29,7 @@ module.exports.srv = srv = {
  */
 module.exports.generateUID = function(len) {
   var buf = []
-    , chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    , chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./'
     , charlen = chars.length;
 
   for (var i = 0; i < len; ++i) {
