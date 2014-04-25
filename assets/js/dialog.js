@@ -5,7 +5,7 @@ $(function() {
 		var wndW = window.outerWidth - window.innerWidth;
 		wndW = (!wndW || wndW < 0) ? 50 : wndW;
 
-		var ctrlH = 178 + wndH;
+		var ctrlH = 500 + wndH;
 		var ctrlW = 605 + (wndW || 15);
 
 		window.resizeTo(ctrlW, ctrlH);
