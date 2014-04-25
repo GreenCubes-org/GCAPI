@@ -144,35 +144,64 @@ module.exports = {
 						return done(null, false);
 					}
 
-					var token = gcapi.generateUID(256);
-					Token.create({
-						token: token,
-						userId: code.userId,
-						clientId: code.clientId,
-						scope: code.scope
-					}).done(function (err, token) {
-						if (err) {
-							return done(err);
-						}
-						if (!gcdbconn) return cb('You\'re not connected to GC MySQL DB');
+					async.waterfall([
+						function createOrFindToken(callback) {
+							Token.findOrCreate({
+								userId: code.userId,
+								clientId: code.clientId
+							}).done(function (err, token) {
+								if (err) return callback(err);
 
-						gcdbconn.query('SELECT login FROM users WHERE id = ?', [token.userId], function (err, result) {
-							if (err) return cb(err);
+								if (!token.token) {
+									token.userId = code.userId;
+									token.clientId = code.clientId;
+									token.token = gcapi.generateUID(256);
+									token.scope = code.scope;
 
-							code.destroy(function (err) {
-								if (err) return done(err);
+									token.save(function (err) {
+										if (err) return callback(err);
 
-								if (result.length !== 0) {
-									done(null, {
-										token: token.token,
-										username: result[0].login,
-										clientId: token.clientId,
-										scope: token.scope
+										callback(null, token);
 									});
 								} else {
-									done('Can\'t find login with this ID!');
+									token.token = gcapi.generateUID(256);
+
+									token.save(function (err) {
+										if (err) return callback(err);
+
+										callback(null, token);
+									});
 								}
+
+
 							});
+						},
+						function removeAuthcode(token, callback) {
+							if (!gcdbconn) return callback('You\'re not connected to GC MySQL DB');
+
+							gcdbconn.query('SELECT login FROM users WHERE id = ?', [token.userId], function (err, result) {
+								if (err) return callback(err);
+
+								code.destroy(function (err) {
+									if (err) return callback(err);
+
+									if (result.length !== 0) {
+										token.login = result[0].login;
+										callback(null, token);
+									} else {
+										callback('Can\'t find login with this ID!');
+									}
+								});
+							});
+						}
+					], function(err, token) {
+						if (err) return done(err);
+
+						done(null, {
+							token: token.token,
+							username: token.login,
+							clientId: token.clientId,
+							scope: token.scope
 						});
 					});
 				});

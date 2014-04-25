@@ -179,25 +179,54 @@ module.exports = {
 	},
 
 	deleteApp: function (req, res) {
-		Client.findOne({
-			id: parseInt(req.params.id, 10)
-		}).done(function (err, client) {
-			if (err) throw err;
+		async.waterfall([
+			function destroyClient(callback) {
 
-			if (client.length === 0) {
-				return res.json(400, {
-					message: 'wrong id',
-					documentation_url: docs_url
-				})
-			} else {
-				client.destroy(function(err) {
-					if (err) throw err;
+				var clientId = parseInt(req.params.id, 10);
 
-					res.json({
-						message: "Success"
-					});
+				Client.findOne({
+					id: clientId
+				}).done(function (err, client) {
+					if (err) return callback(err);
+
+					if (client.length === 0) {
+						return res.json(400, {
+							message: 'wrong id',
+							documentation_url: docs_url
+						});
+					} else {
+						client.destroy(function(err) {
+							if (err) return callback(err);
+
+							callback(null, clientId);
+						});
+					}
+				});
+			},
+			function removeAuthcodes(clientId, callback) {
+				Authcode.destroy({
+					id: parseInt(req.params.id, 10)
+				}).done(function (err) {
+					if (err) return callback(err);
+
+					callback(null, clientId);
+				});
+			},
+			function removeTokens(callback) {
+				Token.destroy({
+					id: parseInt(req.params.id, 10)
+				}).done(function (err) {
+					if (err) return callback(err);
+
+					callback(null, clientId);
 				});
 			}
+		], function (err) {
+			if (err) throw err;
+
+			res.json({
+				message: "Success"
+			});
 		});
 	}
 };

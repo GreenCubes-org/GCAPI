@@ -11,18 +11,15 @@ module.exports = {
   attributes: {
   	
   	token: {
-  		type: 'text',
-  		required: true
+  		type: 'text'
   	},
 
   	userId: {
-  		type: 'INTEGER',
-  		required: true
+  		type: 'INTEGER'
   	},
 
   	clientId: {
-  		type: 'INTEGER',
-  		required: true
+  		type: 'INTEGER'
   	},
 
   	scope: {
