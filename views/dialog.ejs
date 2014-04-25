@@ -25,7 +25,7 @@ scripts.push('dialog.js') %>
 			<form id="oauthform" action="/oauth/authorize/decision" method="post">
 				<input name="transaction_id" type="hidden" value="<%= transactionID %>">
 				<input name="scope" type="hidden" value="<%= cli.scope %>">
-				<div class="field" style="margin: 0 auto;width: 35%;">
+				<div class="field" style="margin: 0 auto;width:90%;">
 					<div class="ui list">
 					<% if(_.contains(scopes, 'profile') || scopes === '*') { %>
 						<div class="item">
