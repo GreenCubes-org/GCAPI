@@ -48,6 +48,7 @@ html, body {
 	height: 100%;
 	overflow: auto;
 	min-width: 500px;
+	width: 100%;
 }
 
 a {
