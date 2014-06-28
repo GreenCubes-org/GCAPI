@@ -221,7 +221,7 @@ module.exports = {
 				return callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindbconn.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
+				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -230,7 +230,7 @@ module.exports = {
 						if (result[0].isBanned) {
 							obj.banned = true;
 							delete obj.bannedTill;
-						} else if (result[0].bannedTillTS > result[0].currentTimestamp) {
+						} else if (result[0].bannedTill > result[0].currentTimestamp) {
 							obj.banned = true;
 							obj.bannedTill = result[0].bannedTill;
 						} else {
@@ -492,7 +492,7 @@ module.exports = {
 				callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindbconn.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
+				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -501,7 +501,7 @@ module.exports = {
 						if (result[0].isBanned) {
 							obj.banned = true;
 							delete obj.bannedTill;
-						} else if (result[0].bannedTillTS > result[0].currentTimestamp) {
+						} else if (result[0].bannedTill > result[0].currentTimestamp) {
 							obj.banned = true;
 							obj.bannedTill = result[0].bannedTill;
 						} else {
