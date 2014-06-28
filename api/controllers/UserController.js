@@ -232,7 +232,7 @@ module.exports = {
 							delete obj.bannedTill;
 						} else if (result[0].bannedTillTS > result[0].currentTimestamp) {
 							obj.banned = true;
-							obj.bannedTill: result[0].bannedTill;
+							obj.bannedTill = result[0].bannedTill;
 						} else {
 							obj.banned = false;
 							delete obj.bannedTill;
@@ -503,7 +503,7 @@ module.exports = {
 							delete obj.bannedTill;
 						} else if (result[0].bannedTillTS > result[0].currentTimestamp) {
 							obj.banned = true;
-							obj.bannedTill: result[0].bannedTill;
+							obj.bannedTill = result[0].bannedTill;
 						} else {
 							obj.banned = false;
 							delete obj.bannedTill;
