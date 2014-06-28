@@ -221,7 +221,7 @@ module.exports = {
 				return callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
+				maindbconn.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -492,7 +492,7 @@ module.exports = {
 				callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
+				maindbconn.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
