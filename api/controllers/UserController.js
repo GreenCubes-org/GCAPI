@@ -221,14 +221,12 @@ module.exports = {
 				return callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [obj.user.login], function (err, result) {
+				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
 						callback('Incorrect user!');
 					} else {
-						obj.user.gameId = result[0].id;
-
 						if (result[0].isBanned) {
 							obj.banned = true;
 							delete obj.bannedTill;
@@ -494,14 +492,12 @@ module.exports = {
 				callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [obj.user.login], function (err, result) {
+				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
 						callback('Incorrect user!');
 					} else {
-						obj.user.gameId = result[0].id;
-
 						if (result[0].isBanned) {
 							obj.banned = true;
 							delete obj.bannedTill;
