@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-	
+
 	currentUserInfo: function (req, res) {
 		if (!req.user) {
 			return res.json(403, {
@@ -15,7 +15,7 @@ module.exports = {
 			});
 		}
 
-		var username =  req.user.login || req.user.username;
+		var username = req.user.login || req.user.username;
 		var obj = {
 			username: username,
 			email: null,
@@ -32,10 +32,13 @@ module.exports = {
 			reg_date: null,
 			prefix: null,
 			nick_color: null,
-			skin_url: 'http://greenusercontent.net/mc/skins/' + username + '.png'
+			skin_url: 'http://greenusercontent.net/mc/skins/' + username + '.png',
+			banned: null,
+			bannedTill: null
 		};
 
 		async.waterfall([
+
 			function findLastseenMain(callback) {
 				gcmainconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 					if (err) return callback(err);
@@ -45,7 +48,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						if (!result[0].exit) {
-							gcapi.srv.getStatus(cfg.srv.main, function(online) {
+							gcapi.srv.getStatus(cfg.srv.main, function (online) {
 								if (online) {
 									obj.status.main = true;
 								} else {
@@ -73,7 +76,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						if (!result[0].exit) {
-							gcapi.srv.getStatus(cfg.srv.rpg, function(online) {
+							gcapi.srv.getStatus(cfg.srv.rpg, function (online) {
 								if (online) {
 									obj.status.rpg = true;
 								} else {
@@ -101,7 +104,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						if (!result[0].exit) {
-							gcapi.srv.getStatus(cfg.srv.apocalyptic, function(online) {
+							gcapi.srv.getStatus(cfg.srv.apocalyptic, function (online) {
 								if (online) {
 									obj.status.apocalyptic = true;
 								} else {
@@ -155,67 +158,90 @@ module.exports = {
 			},
 			function serializeNickColor(obj, callback) {
 				switch (obj.nick_color) {
-					case 'a':
-						obj.nick_color = 'rff55ff55';
-						break;
+				case 'a':
+					obj.nick_color = 'rff55ff55';
+					break;
 
-					case 'b':
-						obj.nick_color = 'rff55ffff';
-						break;
+				case 'b':
+					obj.nick_color = 'rff55ffff';
+					break;
 
-					case 'c':
-						obj.nick_color = 'rffff5555';
-						break;
+				case 'c':
+					obj.nick_color = 'rffff5555';
+					break;
 
-					case 'd':
-						obj.nick_color = 'rffff55ff';
-						break;
+				case 'd':
+					obj.nick_color = 'rffff55ff';
+					break;
 
-					case 'e':
-						obj.nick_color = 'rffffff55';
-						break;
+				case 'e':
+					obj.nick_color = 'rffffff55';
+					break;
 
-					case '1':
-						obj.nick_color = 'rff0000aa';
-						break;
+				case '1':
+					obj.nick_color = 'rff0000aa';
+					break;
 
-					case '2':
-						obj.nick_color = 'rff00aa00';
-						break;
+				case '2':
+					obj.nick_color = 'rff00aa00';
+					break;
 
-					case '3':
-						obj.nick_color = 'rff00aaaa';
-						break;
+				case '3':
+					obj.nick_color = 'rff00aaaa';
+					break;
 
-					case '4':
-						obj.nick_color = 'rffaa0000';
-						break;
+				case '4':
+					obj.nick_color = 'rffaa0000';
+					break;
 
-					case '5':
-						obj.nick_color = 'rffaa00aa';
-						break;
+				case '5':
+					obj.nick_color = 'rffaa00aa';
+					break;
 
-					case '6':
-						obj.nick_color = 'rffffaa00';
-						break;
+				case '6':
+					obj.nick_color = 'rffffaa00';
+					break;
 
-					case '7':
-						obj.nick_color = 'rffaaaaaa';
-						break;
+				case '7':
+					obj.nick_color = 'rffaaaaaa';
+					break;
 
-					case '8':
-						obj.nick_color = 'rff555555';
-						break;
+				case '8':
+					obj.nick_color = 'rff555555';
+					break;
 
-					case '9':
-						obj.nick_color = 'rff5555ff';
-						break;
+				case '9':
+					obj.nick_color = 'rff5555ff';
+					break;
 
-					default:
-						break;
+				default:
+					break;
 				}
 
 				return callback(null, obj);
+			},
+			function findBanInfo(obj, callback) {
+				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [obj.user.login], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback('Incorrect user!');
+					} else {
+						obj.user.gameId = result[0].id;
+
+						if (result[0].isBanned) {
+							obj.banned = true;
+							delete obj.bannedTill;
+						} else if (result[0].bannedTillTS > result[0].currentTimestamp) {
+							obj.banned = true;
+							obj.bannedTill: result[0].bannedTill;
+						} else {
+							obj.banned = false;
+							delete obj.bannedTill;
+						}
+						callback(null, obj);
+					}
+				});
 			}
 		], function (err, obj) {
 			if (err) {
@@ -259,10 +285,13 @@ module.exports = {
 			reg_date: null,
 			prefix: null,
 			nick_color: null,
-			skin_url: null
+			skin_url: null,
+			banned: null,
+			bannedTill: null
 		};
 
 		async.waterfall([
+
 			function getUser(callback) {
 				gcdbconn.query('SELECT id, login FROM users WHERE login = ?', [username], function (err, result) {
 					if (err) return callback(err);
@@ -299,7 +328,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						if (!result[0].exit) {
-							gcapi.srv.getStatus(cfg.srv.main, function(online) {
+							gcapi.srv.getStatus(cfg.srv.main, function (online) {
 								if (obj.status.main !== false && online) {
 									obj.status.main = true;
 								} else {
@@ -327,7 +356,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						if (!result[0].exit) {
-							gcapi.srv.getStatus(cfg.srv.rpg, function(online) {
+							gcapi.srv.getStatus(cfg.srv.rpg, function (online) {
 								if (obj.status.rpg !== false && online) {
 									obj.status.rpg = true;
 								} else {
@@ -355,7 +384,7 @@ module.exports = {
 						callback(null, obj);
 					} else {
 						if (!result[0].exit) {
-							gcapi.srv.getStatus(cfg.srv.apocalyptic, function(online) {
+							gcapi.srv.getStatus(cfg.srv.apocalyptic, function (online) {
 								if (obj.status.apocalyptic !== false && online) {
 									obj.status.apocalyptic = true;
 								} else {
@@ -402,67 +431,90 @@ module.exports = {
 			},
 			function serializeNickColor(obj, callback) {
 				switch (obj.nick_color) {
-					case 'a':
-						obj.nick_color = 'rff55ff55';
-						break;
+				case 'a':
+					obj.nick_color = 'rff55ff55';
+					break;
 
-					case 'b':
-						obj.nick_color = 'rff55ffff';
-						break;
+				case 'b':
+					obj.nick_color = 'rff55ffff';
+					break;
 
-					case 'c':
-						obj.nick_color = 'rffff5555';
-						break;
+				case 'c':
+					obj.nick_color = 'rffff5555';
+					break;
 
-					case 'd':
-						obj.nick_color = 'rffff55ff';
-						break;
+				case 'd':
+					obj.nick_color = 'rffff55ff';
+					break;
 
-					case 'e':
-						obj.nick_color = 'rffffff55';
-						break;
+				case 'e':
+					obj.nick_color = 'rffffff55';
+					break;
 
-					case '1':
-						obj.nick_color = 'rff0000aa';
-						break;
+				case '1':
+					obj.nick_color = 'rff0000aa';
+					break;
 
-					case '2':
-						obj.nick_color = 'rff00aa00';
-						break;
+				case '2':
+					obj.nick_color = 'rff00aa00';
+					break;
 
-					case '3':
-						obj.nick_color = 'rff00aaaa';
-						break;
+				case '3':
+					obj.nick_color = 'rff00aaaa';
+					break;
 
-					case '4':
-						obj.nick_color = 'rffaa0000';
-						break;
+				case '4':
+					obj.nick_color = 'rffaa0000';
+					break;
 
-					case '5':
-						obj.nick_color = 'rffaa00aa';
-						break;
+				case '5':
+					obj.nick_color = 'rffaa00aa';
+					break;
 
-					case '6':
-						obj.nick_color = 'rffffaa00';
-						break;
+				case '6':
+					obj.nick_color = 'rffffaa00';
+					break;
 
-					case '7':
-						obj.nick_color = 'rffaaaaaa';
-						break;
+				case '7':
+					obj.nick_color = 'rffaaaaaa';
+					break;
 
-					case '8':
-						obj.nick_color = 'rff555555';
-						break;
+				case '8':
+					obj.nick_color = 'rff555555';
+					break;
 
-					case '9':
-						obj.nick_color = 'rff5555ff';
-						break;
+				case '9':
+					obj.nick_color = 'rff5555ff';
+					break;
 
-					default:
-						break;
+				default:
+					break;
 				}
 
 				callback(null, obj);
+			},
+			function findBanInfo(obj, callback) {
+				maindb.query('SELECT `id`, `isBanned`, `bannedTill`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTillTS`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [obj.user.login], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length === 0) {
+						callback('Incorrect user!');
+					} else {
+						obj.user.gameId = result[0].id;
+
+						if (result[0].isBanned) {
+							obj.banned = true;
+							delete obj.bannedTill;
+						} else if (result[0].bannedTillTS > result[0].currentTimestamp) {
+							obj.banned = true;
+							obj.bannedTill: result[0].bannedTill;
+						} else {
+							obj.banned = false;
+							delete obj.bannedTill;
+						}
+						callback(null, obj);
+					}
+				});
 			}
 		], function (err, obj) {
 			if (err) {
