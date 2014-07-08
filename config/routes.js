@@ -32,6 +32,7 @@ module.exports.routes = {
 
 	/* User API */
 	'/user': 'user.currentUserInfo',
+	'/user/regions': 'user.regions_list',
 	'/users/:user': 'user.userInfo',
 
 	/* GC.Main section */
@@ -41,6 +42,7 @@ module.exports.routes = {
 	'/main/named_colors': 'main.namedColorsJSON',
 	'/main/named_colors/html': 'main.namedColorsHTML',
 	'/main/items': 'main.items',
+	'/main/regions/:region': 'main.region_info',
 
 	/* GC.RPG section */
 	'/rpg/status': 'rpg.status',

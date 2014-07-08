@@ -519,8 +519,70 @@ module.exports = {
 
 			res.json(obj);
 		});
+	},
 
+	regions_list: function (req, res) {
+		/* Array of objects:
+			{
+				name: 'KernCastle',
+				rights: ['build','full']
+			}
+		*/
 
+		async.waterfall([
+			function getUserLogin(callback) {
+				gcdb.user.getByLogin(req.user.username, 'maindb', function (err, uid) {
+					if (err) return callback(err);
+
+					callback(null, uid);
+				});
+			},
+			function getRegionsWhereUserHaveRights(uid, callback) {
+				gcmainconn.query('SELECT `region` AS `name`, `right` AS `rights` FROM regions_rights WHERE `entityType` = 1 AND `entityId` = ?', [uid], function (err, regions) {
+					if (err) return callback(err);
+
+					callback(null, regions);
+				});
+			},
+			function findEqualObjects(regions, callback) {
+				regions = regions.map(function (element, index) {
+					element.rights = [element.rights];
+
+					regions.forEach(function (el, ix) {
+						if (element.name === el.name && !(el.rights instanceof Array) && element.rights !== el.rights) {
+							element.rights.push(el.rights);
+							delete regions[ix];
+						}
+					});
+
+					return element;
+				});
+
+				regions = regions.filter(function (n) {
+					return n
+				});
+
+				callback(null, regions);
+			},
+			function getRegionNamesNSerializeRights(regions, callback) {
+				async.map(regions, function (element, callback) {
+					gcmainconn.query('SELECT `name` FROM regions WHERE `id` = ?', [element.name], function (err, name) {
+						if (err) return callback(err);
+
+						element.name = name[0].name;
+						element.rights = element.rights.map(function (element) {
+							return gcapi.getRightById(element);
+						});
+
+						callback(null, element);
+					});
+				}, callback);
+			}
+		], function (err, obj) {
+			if (err) throw err;
+
+			res.json(obj);
+		});
 	}
 
 };

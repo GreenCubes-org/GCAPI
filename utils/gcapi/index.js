@@ -1,5 +1,51 @@
 var net = require('net');
 
+module.exports.getRightById = getRightById = function getRightById(id) {
+	switch (id) {
+		case 0:
+			return 'full';
+
+		case 1:
+			return 'grant';
+
+		case 2:
+			return 'build';
+
+		case 3:
+			return 'grant-child';
+
+		case 4:
+			return 'build-child';
+
+		case 5:
+			return 'flow';
+
+		case 6:
+			return 'fire';
+
+		case 7:
+			return 'grant-grant-child';
+
+		case 8:
+			return 'grant-grant';
+
+		case 9:
+			return 'create-child';
+
+		case 10:
+			return 'delete';
+
+		case 11:
+			return 'place';
+
+		case 12:
+			return 'break';
+
+		default:
+			return;
+	};
+};
+
 module.exports.srv = srv = {
 
 	getStatus: function getStatus(srvCfg, cb) {
