@@ -254,6 +254,8 @@ module.exports = {
 					if (err) return callback(err);
 
 					obj.parent = region[0].name;
+
+					callback(null, obj);
 				});
 			},
 			function serializeFlags(obj, callback) {
