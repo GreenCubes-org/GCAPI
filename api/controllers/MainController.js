@@ -250,17 +250,23 @@ module.exports = {
 				});
 			},
 			function serializeParent(obj, callback) {
-				gcmainconn.query('SELECT `name` FROM regions WHERE `id` = ?', [obj.parent], function (err, region) {
-					if (err) return callback(err);
+				if (obj.parent) {
+					gcmainconn.query('SELECT `name` FROM regions WHERE `id` = ?', [obj.parent], function (err, region) {
+						if (err) return callback(err);
 
-					if (region.length) {
-						obj.parent = region[0].name;
-					} else {
-						obj.parent = null
-					}
+						if (region.length) {
+							obj.parent = region[0].name;
+						} else {
+							obj.parent = null;
+						}
+
+						callback(null, obj);
+					});
+				} else {
+					obj.parent = null;
 
 					callback(null, obj);
-				});
+				}
 			},
 			function serializeFlags(obj, callback) {
 				var temp = obj.flags.split(',');
