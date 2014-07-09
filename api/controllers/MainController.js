@@ -253,7 +253,11 @@ module.exports = {
 				gcmainconn.query('SELECT `name` FROM regions WHERE `id` = ?', [obj.parent], function (err, region) {
 					if (err) return callback(err);
 
-					obj.parent = region[0].name;
+					if (region.length) {
+						obj.parent = region[0].name;
+					} else {
+						obj.parent = null
+					}
 
 					callback(null, obj);
 				});
@@ -266,7 +270,7 @@ module.exports = {
 				temp.forEach(function (element) {
 					var el = element.split(':');
 
-					obj.flags[el[0]] = parseInt(el[1], 10);
+					obj.flags[el[0]] = el[1];
 				});
 
 				callback(null, obj);
