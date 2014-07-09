@@ -215,7 +215,7 @@ module.exports = {
 		async.waterfall([
 			function checkData(callback) {
 
-				if (obj.name !== obj.name.replace(/[^a-zA-Z0-9-_]/g, '')) {
+				if (obj.name !== obj.name.replace(/[^a-zA-Z0-9_]/g, '')) {
 					return res.json(400, {
 						message: 'Illegal symbols in region\'s name',
 						documentation_url: docs_url
