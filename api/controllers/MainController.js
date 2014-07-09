@@ -213,7 +213,6 @@ module.exports = {
 		};
 
 		async.waterfall([
-
 			function checkData(callback) {
 
 				if (obj.name !== obj.name.replace(/[^a-zA-Z0-9-_]/g, '')) {
@@ -248,6 +247,13 @@ module.exports = {
 							second: '' + region[0].maxx + ' ' + region[0].maxy + ' ' + region[0].maxz
 						}
 					});
+				});
+			},
+			function serializeParent(obj, callback) {
+				gcmainconn.query('SELECT `name` FROM regions WHERE `id` = ?', [obj.parent], function (err, region) {
+					if (err) return callback(err);
+
+					obj.parent = region[0].name;
 				});
 			},
 			function serializeFlags(obj, callback) {
