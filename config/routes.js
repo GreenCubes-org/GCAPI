@@ -42,7 +42,7 @@ module.exports.routes = {
 	'/main/named_colors': 'main.namedColorsJSON',
 	'/main/named_colors/html': 'main.namedColorsHTML',
 	'/main/items': 'main.items',
-	'/main/regions/:region': 'main.region_info',
+	'/main/regions/:name': 'main.region_info',
 
 	/* GC.RPG section */
 	'/rpg/status': 'rpg.status',
