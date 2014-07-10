@@ -40,14 +40,14 @@ module.exports = {
 		async.waterfall([
 
 			function findLastseenMain(callback) {
-				gcmainconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+				gcdb.user.getLastseen(username, 'gcmaindb', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (!result) {
 						obj.status.main = false;
 						callback(null, obj);
 					} else {
-						if (!result[0].exit) {
+						if (!result.exit) {
 							gcapi.srv.getStatus(cfg.srv.main, function (online) {
 								if (online) {
 									obj.status.main = true;
@@ -55,27 +55,27 @@ module.exports = {
 									obj.status.main = false;
 								}
 
-								obj.lastseen.main = result[0].time;
+								obj.lastseen.main = result.time;
 								callback(null, obj);
 							});
 						} else {
 							obj.status.main = false;
 
-							obj.lastseen.main = result[0].time;
+							obj.lastseen.main = result.time;
 							callback(null, obj);
 						}
 					}
 				});
 			},
 			function findLastseenRpg(obj, callback) {
-				gcrpgconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+				gcdb.user.getLastseen(username, 'gcrpgdb', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (!result) {
 						obj.status.rpg = false;
 						callback(null, obj);
 					} else {
-						if (!result[0].exit) {
+						if (!result.exit) {
 							gcapi.srv.getStatus(cfg.srv.rpg, function (online) {
 								if (online) {
 									obj.status.rpg = true;
@@ -83,27 +83,27 @@ module.exports = {
 									obj.status.rpg = false;
 								}
 
-								obj.lastseen.rpg = result[0].time;
+								obj.lastseen.rpg = result.time;
 								callback(null, obj);
 							});
 						} else {
 							obj.status.rpg = false;
 
-							obj.lastseen.rpg = result[0].time;
+							obj.lastseen.rpg = result.time;
 							callback(null, obj);
 						}
 					}
 				});
 			},
 			function findLastseenApo(obj, callback) {
-				gcapoconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+				gcdb.user.getLastseen(username, 'gcapodb', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (!result) {
 						obj.status.apocalyptic = false;
 						callback(null, obj);
 					} else {
-						if (!result[0].exit) {
+						if (!result.exit) {
 							gcapi.srv.getStatus(cfg.srv.apocalyptic, function (online) {
 								if (online) {
 									obj.status.apocalyptic = true;
@@ -111,13 +111,13 @@ module.exports = {
 									obj.status.apocalyptic = false;
 								}
 
-								obj.lastseen.apocalyptic = result[0].time;
+								obj.lastseen.apocalyptic = result.time;
 								callback(null, obj);
 							});
 						} else {
 							obj.status.apocalyptic = false;
 
-							obj.lastseen.apocalyptic = result[0].time;
+							obj.lastseen.apocalyptic = result.time;
 							callback(null, obj);
 						}
 					}
@@ -318,14 +318,14 @@ module.exports = {
 				}
 			},
 			function findLastseenMain(obj, callback) {
-				gcmainconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+				gcdb.user.getLastseen(username, 'gcmaindb', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (!result) {
 						obj.status.main = false;
 						callback(null, obj);
 					} else {
-						if (!result[0].exit) {
+						if (!result.exit) {
 							gcapi.srv.getStatus(cfg.srv.main, function (online) {
 								if (obj.status.main !== false && online) {
 									obj.status.main = true;
@@ -333,27 +333,27 @@ module.exports = {
 									obj.status.main = false;
 								}
 
-								obj.lastseen.main = result[0].time;
+								obj.lastseen.main = result.time;
 								callback(null, obj);
 							});
 						} else {
 							obj.status.main = false;
 
-							obj.lastseen.main = result[0].time;
+							obj.lastseen.main = result.time;
 							callback(null, obj);
 						}
 					}
 				});
 			},
 			function findLastseenRpg(obj, callback) {
-				gcrpgconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+				gcdb.user.getLastseen(username, 'gcrpgdb', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (!result) {
 						obj.status.rpg = false;
 						callback(null, obj);
 					} else {
-						if (!result[0].exit) {
+						if (!result.exit) {
 							gcapi.srv.getStatus(cfg.srv.rpg, function (online) {
 								if (obj.status.rpg !== false && online) {
 									obj.status.rpg = true;
@@ -361,27 +361,27 @@ module.exports = {
 									obj.status.rpg = false;
 								}
 
-								obj.lastseen.rpg = result[0].time;
+								obj.lastseen.rpg = result.time;
 								callback(null, obj);
 							});
 						} else {
 							obj.status.rpg = false;
 
-							obj.lastseen.rpg = result[0].time;
+							obj.lastseen.rpg = result.time;
 							callback(null, obj);
 						}
 					}
 				});
 			},
 			function findLastseenApo(obj, callback) {
-				gcapoconn.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS time FROM login_log WHERE login = ? ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+				gcdb.user.getLastseen(username, 'gcapodb', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (!result) {
 						obj.status.apocalyptic = false;
 						callback(null, obj);
 					} else {
-						if (!result[0].exit) {
+						if (!result.exit) {
 							gcapi.srv.getStatus(cfg.srv.apocalyptic, function (online) {
 								if (obj.status.apocalyptic !== false && online) {
 									obj.status.apocalyptic = true;
@@ -389,13 +389,13 @@ module.exports = {
 									obj.status.apocalyptic = false;
 								}
 
-								obj.lastseen.apocalyptic = result[0].time;
+								obj.lastseen.apocalyptic = result.time;
 								callback(null, obj);
 							});
 						} else {
 							obj.status.apocalyptic = false;
 
-							obj.lastseen.apocalyptic = result[0].time;
+							obj.lastseen.apocalyptic = result.time;
 							callback(null, obj);
 						}
 					}

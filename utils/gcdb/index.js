@@ -22,7 +22,7 @@ module.exports.user = user = {
 				break;
 
 			default:
-				cb('Wrong DB');
+				return cb('Wrong DB');
 		}
 
 		if (!db) return cb('You\'re not connected to GC MySQL DB');
@@ -116,5 +116,33 @@ module.exports.user = user = {
 		} else {
 			cb('Incorrect variable!');
 		}
+	},
+
+	getLastseen: function getLastseen(username, db, cb) {
+		switch (db) {
+			case 'gcmaindb':
+				db = gcmainconn;
+				break;
+
+			case 'gcrpgdb':
+				db = gcrpgconn;
+				break;
+
+			case 'gcapodb':
+				db = gcapoconn;
+				break;
+
+			default:
+				return cb('Wrong DB');
+		}
+
+		if (!db) return cb('You\'re not connected to GC MySQL DB');
+
+		db.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS `time` FROM login_log WHERE `login` = ? AND `status` = 1 ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+			if (err) return cb(err);
+
+			cb(null, result[0]);
+		});
 	}
+
 };
