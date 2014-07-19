@@ -43,6 +43,14 @@ scripts.push('dialog.js') %>
 							</div>
 						</div>
 					<% } %>
+					<% if(_.contains(scopes, 'regions') || scopes === '*') { %>
+						<div class="item">
+							<div class="content">
+								<div class="header">Приложение сможет узнать твой список регионов</div>
+								У приложения будет доступ к твоему списку регионов на Main сервере.
+							</div>
+						</div>
+					<% } %>
 					</div>
 				</div>
 				<div class="ui form" style="display: inline-block !important; margin-top: 20px;">

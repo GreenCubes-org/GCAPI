@@ -20,7 +20,7 @@ module.exports.policies = {
 		'*': false,
 		'userInfo': true,
 		'currentUserInfo': 'scopeProfile',
-		'regions_list': 'scopeProfile'
+		'regions_list': ['scopeProfile','scopeRegions']
 	},
 
 	'OAuth': {
