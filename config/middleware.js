@@ -19,7 +19,8 @@ module.exports = {
 				var urlExceptions = [
 					'/',
 					'/rate_limit',
-					'/meta'
+					'/meta',
+					'/logout'
 				];
 
 				if (_.contains(urlExceptions, req.path)) {
