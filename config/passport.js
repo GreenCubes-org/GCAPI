@@ -160,7 +160,7 @@ passport.use(new BearerStrategy(
 				scope: '*'
 			}
 			
-			gcdbconn.query('SELECT login, password, activation_code FROM users WHERE id = ?', [token.userId], function (err, result) {
+			gcdbconn.query('SELECT id, login as username, password, activation_code FROM users WHERE id = ?', [token.userId], function (err, result) {
 				// database error
 				if (err) {
 					return done(err, false, {

@@ -111,6 +111,7 @@ module.exports.scopePolice = function(scope,req,res,next) {
 
 		passport.authenticate(
 			'bearer',
+			{ session: false },
 			function(err, user, info)
 			{
 				if ((err) || (!user))
@@ -150,7 +151,7 @@ module.exports.scopePolice = function(scope,req,res,next) {
 					user: user.login
 				};
 
-				return next();
+				next();
 			}
 		)(req, res);
 	});

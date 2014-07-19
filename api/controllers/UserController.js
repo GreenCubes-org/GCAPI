@@ -531,6 +531,7 @@ module.exports = {
 
 		async.waterfall([
 			function getUserLogin(callback) {
+
 				gcdb.user.getByLogin(req.user.username, 'maindb', function (err, uid) {
 					if (err) return callback(err);
 
