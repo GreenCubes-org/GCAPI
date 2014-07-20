@@ -119,9 +119,12 @@ module.exports.user = user = {
 	},
 
 	getLastseen: function getLastseen(username, db, cb) {
+		var extraQuery = '';
+
 		switch (db) {
 			case 'gcmaindb':
 				db = gcmainconn;
+				extraQuery = 'AND `status` = 1';
 				break;
 
 			case 'gcrpgdb':
@@ -138,7 +141,7 @@ module.exports.user = user = {
 
 		if (!db) return cb('You\'re not connected to GC MySQL DB');
 
-		db.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS `time` FROM login_log WHERE `login` = ? AND `status` = 1 ORDER BY time DESC LIMIT 1', [username], function (err, result) {
+		db.query('SELECT `exit`, UNIX_TIMESTAMP(time) AS `time` FROM login_log WHERE `login` = ? ' + extraQuery + ' ORDER BY time DESC LIMIT 1', [username], function (err, result) {
 			if (err) return cb(err);
 
 			cb(null, result[0]);
