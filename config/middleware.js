@@ -15,7 +15,7 @@ module.exports = {
 				// Max count of requests
 				var maxReqs;
 
-				if (req.session.passport.user) {
+				if (req.session.passport && req.session.passport.user) {
 					maxReqs = 5000;
 				} else {
 					maxReqs = 500;
