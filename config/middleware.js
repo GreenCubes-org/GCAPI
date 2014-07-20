@@ -21,8 +21,6 @@ module.exports = {
 					maxReqs = 500;
 				}
 
-				console.log(maxReqs, req.session);
-
 				// Exceptions. Don't limit those paths
 				var urlExceptions = [
 					'/',
