@@ -13,7 +13,15 @@ module.exports = {
 			app.use(function (req, res, next) {
 
 				// Max count of requests
-				var maxReqs = 1000;
+				var maxReqs;
+
+				if (req.session.passport.user) {
+					maxReqs = 5000;
+				} else {
+					maxReqs = 500;
+				}
+
+				console.log(maxReqs, req.session);
 
 				// Exceptions. Don't limit those paths
 				var urlExceptions = [
@@ -78,28 +86,48 @@ module.exports = {
 					});
 
 					// Limiting magic
-					limit.get(function (err, limit) {
+					limit.get(function (err, lim) {
 						if (err) return next(err);
 
-						req.limitTotal = limit.total;
-						req.limitRemaining = limit.remaining;
-						req.limitReset = limit.reset;
+						async.waterfall([
+							function (callback) {
+								if (lim.total !== maxReqs) {
+									redis.del('limit:' + ip + ':reset');
+									redis.del('limit:' + ip + ':count');
+									redis.del('limit:' + ip + ':limit');
 
-						res.set('X-RateLimit-Limit', limit.total);
-						res.set('X-RateLimit-Remaining', limit.remaining);
-						res.set('X-RateLimit-Reset', limit.reset);
+									limit.get(function (err, lim) {
+										if (err) return callback(err);
 
-						// all good
-						if (limit.remaining) return next();
+										callback(null, lim);
+									});
+								} else {
+									callback(null, lim);
+								}
+							}
+						], function (err, lim) {
+							if (err) return next(err);
 
-						// not good
-						var delta = (limit.reset * 1000) - Date.now() | 0;
-						var after = limit.reset - (Date.now() / 1000) | 0;
-						res.set('Retry-After', after);
-						res.status(429).json({
-							message: 'Rate limit exceeded, retry later',
-							retry_in: delta,
-							documentation_url: docs_url
+							req.limitTotal = lim.total;
+							req.limitRemaining = lim.remaining;
+							req.limitReset = lim.reset;
+
+							res.set('X-RateLimit-Limit', lim.total);
+							res.set('X-RateLimit-Remaining', lim.remaining);
+							res.set('X-RateLimit-Reset', lim.reset);
+
+							// all good
+							if (lim.remaining) return next();
+
+							// not good
+							var delta = (lim.reset * 1000) - Date.now() | 0;
+							var after = lim.reset - (Date.now() / 1000) | 0;
+							res.set('Retry-After', after);
+							res.status(429).json({
+								message: 'Rate limit exceeded, retry later',
+								retry_in: delta,
+								documentation_url: docs_url
+							});
 						});
 					});
 				}
