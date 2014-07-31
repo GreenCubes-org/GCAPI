@@ -34,7 +34,8 @@ module.exports = {
 			nick_color: null,
 			skin_url: 'http://greenusercontent.net/mc/skins/' + username + '.png',
 			banned: null,
-			bannedTill: null
+			bannedTill: null,
+			badges: []
 		};
 
 		async.waterfall([
@@ -237,8 +238,19 @@ module.exports = {
 							obj.banned = false;
 							delete obj.bannedTill;
 						}
-						callback(null, obj);
+						callback(null, obj, result[0].id);
 					}
+				});
+			},
+			function getBadges(obj, uid, callback) {
+				maindbconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length) {
+						obj.badges = result;
+					}
+
+					callback(null, obj);
 				});
 			}
 		], function (err, obj) {
@@ -252,6 +264,7 @@ module.exports = {
 					throw err;
 				}
 			}
+
 			res.json(obj);
 		});
 
@@ -285,7 +298,8 @@ module.exports = {
 			nick_color: null,
 			skin_url: null,
 			banned: null,
-			bannedTill: null
+			bannedTill: null,
+			badges: []
 		};
 
 		async.waterfall([
@@ -508,8 +522,19 @@ module.exports = {
 							obj.banned = false;
 							delete obj.bannedTill;
 						}
-						callback(null, obj);
+						callback(null, obj, result[0].id);
 					}
+				});
+			},
+			function getBadges(obj, uid, callback) {
+				maindbconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
+					if (err) return callback(err);
+
+					if (result.length) {
+						obj.badges = result;
+					}
+
+					callback(null, obj);
 				});
 			}
 		], function (err, obj) {
