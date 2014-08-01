@@ -243,7 +243,7 @@ module.exports = {
 				});
 			},
 			function getBadges(obj, uid, callback) {
-				maindbconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
+				gcmainconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length) {
@@ -527,7 +527,7 @@ module.exports = {
 				});
 			},
 			function getBadges(obj, uid, callback) {
-				maindbconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
+				gcmainconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length) {
