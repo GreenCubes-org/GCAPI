@@ -56,6 +56,12 @@ module.exports = {
 				documentation_url: docs_url
 			});
 		}
+		if (!req.body.internal) {
+			return res.json(400, {
+				error: "internal is not defined",
+				documentation_url: docs_url
+			});
+		}
 
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
 			Client.create({
@@ -65,7 +71,8 @@ module.exports = {
 				homeURI: req.body.homeURI,
 				owner: uid,
 				scope: req.body.scope,
-				description: req.body.description
+				description: req.body.description,
+				internal: req.body.internal
 			}).exec(function (err, client) {
 				if (err) throw err;
 
@@ -120,6 +127,12 @@ module.exports = {
 				documentation_url: docs_url
 			});
 		}
+		if (!req.body.internal) {
+			return res.json(400, {
+				error: "internal is not defined",
+				documentation_url: docs_url
+			});
+		}
 
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
 			Client.findOne({
@@ -138,6 +151,7 @@ module.exports = {
 				client.owner = uid;
 				client.scope = req.body.scope;
 				client.description = req.body.description;
+				client.internal = req.body.internal == 'true';
 
 				client.save(function (err) {
 					if (err) throw err;

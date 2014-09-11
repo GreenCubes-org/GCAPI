@@ -18,7 +18,7 @@
  */
 
 module.exports = function notFound (data, options) {
-	console.log('xXx');
+
 	var req = this.req;
 	var res = this.res;
 	var sails = req._sails;
