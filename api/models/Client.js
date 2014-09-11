@@ -43,6 +43,11 @@ module.exports = {
 		description: {
 			type: 'STRING',
 			required: true
+		},
+
+		internal: {
+			type: 'boolean',
+			required: true
 		}
 
 	}

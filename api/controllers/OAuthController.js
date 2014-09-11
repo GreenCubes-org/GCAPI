@@ -11,7 +11,7 @@ var version = require('../../package.json').version,
 module.exports = {
 
 	listApps: function (req, res) {
-		Client.find().done(function (err, clients) {
+		Client.find().exec(function (err, clients) {
 			if (err) throw err;
 
 			res.json(clients);
@@ -56,6 +56,12 @@ module.exports = {
 				documentation_url: docs_url
 			});
 		}
+		if (!req.body.internal) {
+			return res.json(400, {
+				error: "internal is not defined",
+				documentation_url: docs_url
+			});
+		}
 
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
 			Client.create({
@@ -65,8 +71,9 @@ module.exports = {
 				homeURI: req.body.homeURI,
 				owner: uid,
 				scope: req.body.scope,
-				description: req.body.description
-			}).done(function (err, client) {
+				description: req.body.description,
+				internal: req.body.internal
+			}).exec(function (err, client) {
 				if (err) throw err;
 
 				gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
@@ -120,11 +127,17 @@ module.exports = {
 				documentation_url: docs_url
 			});
 		}
+		if (!req.body.internal) {
+			return res.json(400, {
+				error: "internal is not defined",
+				documentation_url: docs_url
+			});
+		}
 
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
 			Client.findOne({
 				id: parseInt(req.params.id, 10)
-			}).done(function (err, client) {
+			}).exec(function (err, client) {
 				if (err) throw err;
 
 				client.name = req.body.name;
@@ -138,6 +151,7 @@ module.exports = {
 				client.owner = uid;
 				client.scope = req.body.scope;
 				client.description = req.body.description;
+				client.internal = req.body.internal == 'true';
 
 				client.save(function (err) {
 					if (err) throw err;
@@ -159,7 +173,7 @@ module.exports = {
 	getApp: function (req, res) {
 		Client.findOne({
 			id: parseInt(req.params.id, 10)
-		}).done(function (err, client) {
+		}).exec(function (err, client) {
 			if (err) throw err;
 
 			if (!client) {
@@ -186,7 +200,7 @@ module.exports = {
 
 				Client.findOne({
 					id: clientId
-				}).done(function (err, client) {
+				}).exec(function (err, client) {
 					if (err) return callback(err);
 
 					if (client.length === 0) {
@@ -206,7 +220,7 @@ module.exports = {
 			function removeAuthcodes(clientId, callback) {
 				Authcode.destroy({
 					id: parseInt(req.params.id, 10)
-				}).done(function (err) {
+				}).exec(function (err) {
 					if (err) return callback(err);
 
 					callback(null, clientId);
@@ -215,7 +229,7 @@ module.exports = {
 			function removeTokens(callback) {
 				Token.destroy({
 					id: parseInt(req.params.id, 10)
-				}).done(function (err) {
+				}).exec(function (err) {
 					if (err) return callback(err);
 
 					callback(null, clientId);

@@ -19,6 +19,10 @@ module.exports.session = {
 	// forcing them to log in again.
 	secret: cfg.secret,
 
+	cookie: {
+		maxAge: 730 * 60 * 60 * 1000
+	},
+
 	adapter: 'redis',
 	host: cfg.redis.host,
 	port: cfg.redis.port,
