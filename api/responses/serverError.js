@@ -1,11 +1,23 @@
 /**
- * 500.
+ * 500 (Server Error) Response
  *
- * For more information on error handling in Sails/Express, check out:
- * http://expressjs.com/guide.html#error-handling
+ * Usage:
+ * return res.serverError();
+ * return res.serverError(err);
+ * return res.serverError(err, 'some/specific/error/view');
+ *
+ * NOTE:
+ * If something throws in a policy or controller, or an internal
+ * error is encountered, Sails will call `res.serverError()`
+ * automatically.
  */
 
-module.exports[500] = function serverErrorOccurred(errors, req, res, expressErrorHandler) {
+module.exports = function serverError(data, options) {
+
+	// Get access to `req`, `res`, & `sails`
+	var req = this.req;
+	var res = this.res;
+	var sails = req._sails;
 
 	// Ensure that `errors` is a list
 	var displayedErrors = (typeof errors !== 'object' || !errors.length) ? [errors] : errors;
@@ -33,6 +45,5 @@ module.exports[500] = function serverErrorOccurred(errors, req, res, expressErro
 		sails.log.error(displayedErrors[i].stack);
 	}
 
-	res.status(500).json(response);
-
+	return res.status(500).jsonx(response);
 };

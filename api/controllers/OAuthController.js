@@ -11,7 +11,7 @@ var version = require('../../package.json').version,
 module.exports = {
 
 	listApps: function (req, res) {
-		Client.find().done(function (err, clients) {
+		Client.find().exec(function (err, clients) {
 			if (err) throw err;
 
 			res.json(clients);
@@ -66,7 +66,7 @@ module.exports = {
 				owner: uid,
 				scope: req.body.scope,
 				description: req.body.description
-			}).done(function (err, client) {
+			}).exec(function (err, client) {
 				if (err) throw err;
 
 				gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
@@ -124,7 +124,7 @@ module.exports = {
 		gcdb.user.getByLogin(req.body.owner, 'gcdb', function (err, uid) {
 			Client.findOne({
 				id: parseInt(req.params.id, 10)
-			}).done(function (err, client) {
+			}).exec(function (err, client) {
 				if (err) throw err;
 
 				client.name = req.body.name;
@@ -159,7 +159,7 @@ module.exports = {
 	getApp: function (req, res) {
 		Client.findOne({
 			id: parseInt(req.params.id, 10)
-		}).done(function (err, client) {
+		}).exec(function (err, client) {
 			if (err) throw err;
 
 			if (!client) {
@@ -186,7 +186,7 @@ module.exports = {
 
 				Client.findOne({
 					id: clientId
-				}).done(function (err, client) {
+				}).exec(function (err, client) {
 					if (err) return callback(err);
 
 					if (client.length === 0) {
@@ -206,7 +206,7 @@ module.exports = {
 			function removeAuthcodes(clientId, callback) {
 				Authcode.destroy({
 					id: parseInt(req.params.id, 10)
-				}).done(function (err) {
+				}).exec(function (err) {
 					if (err) return callback(err);
 
 					callback(null, clientId);
@@ -215,7 +215,7 @@ module.exports = {
 			function removeTokens(callback) {
 				Token.destroy({
 					id: parseInt(req.params.id, 10)
-				}).done(function (err) {
+				}).exec(function (err) {
 					if (err) return callback(err);
 
 					callback(null, clientId);
