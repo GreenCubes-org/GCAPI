@@ -18,7 +18,6 @@ module.exports = {
 		};
 
 		async.waterfall([
-
 			function getServerStatus(callback) {
 				gcapi.srv.getStatus(cfg.srv.main, function (online) {
 					obj.status = online;

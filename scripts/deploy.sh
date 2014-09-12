@@ -3,4 +3,8 @@
 git pull origin production
 
 npm install
+
+# DB migration
+node db-migrations.js
+
 forever -a -l ../logs/forever.log -o ../logs/out.log -e ../logs/err.log restart gcapi.js
