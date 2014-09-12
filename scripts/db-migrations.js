@@ -1,11 +1,11 @@
 /* Configuration */
 var migrations = [
-	{ table: 'client', column: 'internal', type: 'varchar(2)' }
+	//{ do: 'modify', table: 'client', column: 'internal', type: 'varchar(2)' }
 ];
 
 /* Example config:
 var tables = [
-	{ column: 'client', type: 'varchar(2) }
+	{ do: 'modify', column: 'client', type: 'varchar(2) }
 ];
 */
 
@@ -40,7 +40,23 @@ db.connect();
 
 function migrate(migrations, cb) {
 	async.each(migrations, function (migrate, callback) {
-		db.query('ALTER TABLE ' + migrate.table + ' ADD ' + migrate.column + ' ' + migrate.type, function (err, result) {
+		var query;
+
+		switch (migrate.do) {
+			case 'add':
+				query = 'ALTER TABLE ' + migrate.table + ' ADD ' + migrate.column + ' ' + migrate.type;
+				break;
+
+			case 'modify':
+				query = 'ALTER TABLE ' + migrate.table + ' MODIFY ' + migrate.column + ' ' + migrate.type;
+				break;
+
+			case 'drop':
+				query = 'ALTER TABLE ' + migrate.table + ' DROP ' + migrate.column;
+				break;
+		}
+
+		db.query(query, function (err, result) {
 			if (err) {
 				if (err.code === 'ER_DUP_FIELDNAME') {
 					console.log('[DB-MIGRATIONS] ALTER TABLE ' + migrate.table + ' ADD ' + migrate.column + ' ' + migrate.type + ' - ALREADY CREATED');
