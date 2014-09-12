@@ -67,6 +67,6 @@ async.waterfall([
 ], function (err) {
 	if (err) throw err;
 
-	console.log('[FIX-DB] EXIT. GOODBYE.');
+	console.log('[FIX-DB] DONE. GOODBYE.');
 	process.exit(0);
 })
