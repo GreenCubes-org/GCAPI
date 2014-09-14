@@ -101,7 +101,7 @@ module.exports.scopePolice = function(scope,req,res,next) {
 
 	Token.find({
 		token: req.query.access_token
-	}).done(function(err, token) {
+	}).exec(function(err, token) {
 		if (!token.length || !token[0].scope) {
 			return res.status(403).json({
 				message: 'Forbidden. Need authorization',
