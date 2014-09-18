@@ -257,13 +257,7 @@ module.exports.http = {
 									callback(null, token);
 								});
 							} else {
-								token.token = gcapi.generateUID(256);
-
-								token.save(function (err) {
-									if (err) return callback(err);
-
-									callback(null, token);
-								});
+								callback(null, token);
 							}
 
 
@@ -378,22 +372,18 @@ module.exports.http = {
 							if (err) return callback(err);
 
 							if (token) {
-								token.destroy(function (err) {
-									if (err) return callback(err);
+								Authcode.create({
+									code: gcapi.generateUID(32),
+									clientId: req.oauth2.client.id,
+									redirectURI: req.oauth2.client.redirectURI,
+									userId: req.user.id,
+									scope: req.oauth2.client.scope
+								}).exec(function (err, code) {
+									if (err) {
+										return res.serverError();
+									}
 
-									Authcode.create({
-										code: gcapi.generateUID(32),
-										clientId: req.oauth2.client.id,
-										redirectURI: req.oauth2.client.redirectURI,
-										userId: req.user.id,
-										scope: req.oauth2.client.scope
-									}).exec(function (err, code) {
-										if (err) {
-											return res.serverError();
-										}
-
-										res.redirect(req.oauth2.client.redirectURI + '?code=' + code.code);
-									});
+									res.redirect(req.oauth2.client.redirectURI + '?code=' + code.code);
 								});
 							} else {
 								callback(null);
