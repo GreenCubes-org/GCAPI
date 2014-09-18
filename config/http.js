@@ -257,13 +257,7 @@ module.exports.http = {
 									callback(null, token);
 								});
 							} else {
-								token.token = gcapi.generateUID(256);
-
-								token.save(function (err) {
-									if (err) return callback(err);
-
-									callback(null, token);
-								});
+								callback(null, token);
 							}
 
 
@@ -368,42 +362,75 @@ module.exports.http = {
 				});
 			}),
 			function (req, res) {
-				if (req.oauth2.client.redirectURI !== req.oauth2.req.redirectURI) {
-					return res.json(400, {
-						error: "wrong redirect_uri",
-						documentation_url: docs_url
-					});
-				}
+				async.waterfall([
+					function check4ActiveTokens(callback) {
+						Token.findOne({
+							clientId: req.oauth2.client.id,
+							userId: req.user.id,
+							scope: req.oauth2.client.scope
+						}).exec(function (err, token) {
+							if (err) return callback(err);
 
-				var scopes;
-				if (req.oauth2.client.scope.split(',') === req.oauth2.client.scope) {
-					scopes = req.oauth2.client.scope
-				} else {
-					scopes = req.oauth2.client.scope.split(',')
-				}
+							if (token) {
+								Authcode.create({
+									code: gcapi.generateUID(32),
+									clientId: req.oauth2.client.id,
+									redirectURI: req.oauth2.client.redirectURI,
+									userId: req.user.id,
+									scope: req.oauth2.client.scope
+								}).exec(function (err, code) {
+									if (err) {
+										return res.serverError();
+									}
 
-				if (req.oauth2.client.internal === true) {
-					Authcode.create({
-						code: gcapi.generateUID(32),
-						clientId: req.oauth2.client.id,
-						redirectURI: req.oauth2.client.redirectURI,
-						userId: req.user.id,
-						scope: req.oauth2.client.scope
-					}).exec(function (err, code) {
-						if (err) {
-							return res.serverError();
+									res.redirect(req.oauth2.client.redirectURI + '?code=' + code.code);
+								});
+							} else {
+								callback(null);
+							}
+						});
+					},
+					function otherChecks(callback) {
+						if (req.oauth2.client.redirectURI !== req.oauth2.req.redirectURI) {
+							return res.json(400, {
+								error: "wrong redirect_uri",
+								documentation_url: docs_url
+							});
 						}
 
-						res.redirect(req.oauth2.client.redirectURI + '?code=' + code.code);
-					});
-					return;
-				}
+						var scopes;
+						if (req.oauth2.client.scope.split(',') === req.oauth2.client.scope) {
+							scopes = req.oauth2.client.scope
+						} else {
+							scopes = req.oauth2.client.scope.split(',')
+						}
 
-				res.render('dialog', {
-					transactionID: req.oauth2.transactionID,
-					user: req.user,
-					cli: req.oauth2.client,
-					scopes: scopes
+						if (req.oauth2.client.internal === true) {
+							Authcode.create({
+								code: gcapi.generateUID(32),
+								clientId: req.oauth2.client.id,
+								redirectURI: req.oauth2.client.redirectURI,
+								userId: req.user.id,
+								scope: req.oauth2.client.scope
+							}).exec(function (err, code) {
+								if (err) {
+									return res.serverError();
+								}
+
+								res.redirect(req.oauth2.client.redirectURI + '?code=' + code.code);
+							});
+							return;
+						}
+
+						res.render('dialog', {
+							transactionID: req.oauth2.transactionID,
+							user: req.user,
+							cli: req.oauth2.client,
+							scopes: scopes
+						});
+					}
+				], function (err) {
+					if (err) throw err;
 				});
 			});
 
