@@ -24,10 +24,7 @@ module.exports.bootstrap = function (cb) {
 		global.cfg.userStatusException = [
 			'Drbadnick',
 			'Xitaly',
-			'Cardinal',
-			'Messiah7',
 			'Satanuga',
-			'FarhanLester',
 			'Kunik',
 			'Panty',
 			'nzh',
@@ -39,7 +36,9 @@ module.exports.bootstrap = function (cb) {
 			'MushrO_om',
 			'tort32',
 			'Rena4ka',
-			'Feyola'
+			'Feyola',
+			'MacMax',
+			'venus'
 		];
 	}
 
