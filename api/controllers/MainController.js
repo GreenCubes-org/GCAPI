@@ -29,10 +29,11 @@ module.exports = {
 				gcmainconn.query('SELECT online FROM log_online ORDER BY timestamp DESC LIMIT 1', function (err, result) {
 					if (err) return callback(err);
 
-					if (result.length === 0) {
+					if (result.length === 0 || !obj.status) {
 						callback(null, obj);
 					} else {
 						obj.online = result[0].online;
+
 						callback(null, obj);
 					}
 				});
