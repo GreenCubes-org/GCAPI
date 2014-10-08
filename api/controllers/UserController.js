@@ -33,6 +33,7 @@ module.exports = {
 			prefix: null,
 			nick_color: null,
 			skin_url: 'http://greenusercontent.net/mc/skins/' + username + '.png',
+			cape_url: 'http://greenusercontent.net/mc/capes/' + username + '.png',
 			banned: null,
 			bannedTill: null,
 			badges: []
@@ -297,6 +298,7 @@ module.exports = {
 			prefix: null,
 			nick_color: null,
 			skin_url: null,
+			cape_url: null,
 			banned: null,
 			bannedTill: null,
 			badges: []
@@ -316,6 +318,7 @@ module.exports = {
 					} else {
 						obj.username = result[0].login;
 						obj.skin_url = 'http://greenusercontent.net/mc/skins/' + obj.username + '.png';
+						obj.cape_url = 'http://greenusercontent.net/mc/capes/' + obj.username + '.png';
 						callback(null, obj);
 					}
 				});
