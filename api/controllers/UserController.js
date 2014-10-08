@@ -276,7 +276,7 @@ module.exports = {
 		username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
 
 		if (username !== req.params.user) {
-			res.json(203, {
+			res.json(404, {
 				message: 'User not exists',
 				documentation_url: docs_url
 			});
@@ -311,7 +311,7 @@ module.exports = {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
-						res.json(203, {
+						res.json(404, {
 							message: 'User not exists',
 							documentation_url: docs_url
 						});
