@@ -125,7 +125,7 @@ module.exports = {
 		async.waterfall([
 
 			function getNamedColors(callback) {
-				var query = 'SELECT name, localizedName, h, s, pioneer, opened, secondPioneer, repeated FROM `named_colors` ORDER BY h DESC, s DESC';
+				var query = 'SELECT name, localizedName, h, s, pioneer, opened, secondPioneer, repeated FROM `named_colors` ORDER BY h ASC, s ASC';
 
 				gcmainconn.query(query, function (err, result) {
 					if (err) return callback(err);
