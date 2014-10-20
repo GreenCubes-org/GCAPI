@@ -139,58 +139,58 @@ a:hover, a:active {
 }
 
 .enterbutton {
-	background: url('/images/blue_normal.png') no-repeat scroll 0 0 transparent;
+	background: url('/images/blue_button.png') no-repeat scroll 0 0 transparent;
 	color: #000000;
 	cursor: pointer;
-	height: 38px;
+	height: 36px;
 	padding-bottom: 2px;
-	width: 203px;
+	width: 202px;
 	border: none;
 }
 
 .enterbutton:hover {
-	background: url('/images/blue_press.png') no-repeat scroll 0 0 transparent;
+	background-position: 0 -38px;
 }
 
 .enterbutton:active {
-	background: url('/images/blue_pressed.png') no-repeat scroll 0 0 transparent;
+	background-position: 0 -76px;
 }
 
 
 .allowbutton {
-	background: url('/images/green_normal.png') no-repeat scroll 0 0 transparent;
+	background: url('/images/green_button.png') no-repeat scroll 0 0 transparent;
 	color: #000000;
 	cursor: pointer;
-	height: 42px;
+	height: 40px;
 	padding-bottom: 2px;
 	width: 222px;
 	border: none;
 }
 
 .allowbutton:hover {
-	background: url('/images/green_press.png') no-repeat scroll 0 0 transparent;
+	background-position: 0 -42px;
 }
 
 .allowbutton:active {
-	background: url('/images/green_pressed.png') no-repeat scroll 0 0 transparent;
+	background-position: 0 -84px;
 }
 
 .cancelbutton {
-	background: url('/images/red_normal.png') no-repeat scroll 0 0 transparent;
+	background: url('/images/red_button.png') no-repeat scroll 0 0 transparent;
 	color: #000000;
 	cursor: pointer;
-	height: 38px;
+	height: 36px;
 	padding-bottom: 2px;
 	width: 203px;
 	border: none;
 }
 
 .cancelbutton:hover {
-	background: url('/images/red_press.png') no-repeat scroll 0 0 transparent;
+	background-position: 0 -38px;
 }
 
 .cancelbutton:active {
-	background: url('/images/red_pressed.png') no-repeat scroll 0 0 transparent;
+	background-position: 0 -76px;
 }
 
 #wtflink {
