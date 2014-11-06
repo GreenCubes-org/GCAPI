@@ -301,8 +301,8 @@ module.exports.http = {
 					if (err) return done(err);
 
 					done(null, {
-						id: token.uid,
 						token: token.token,
+						userId: token.uid,
 						username: token.login,
 						clientId: token.clientId,
 						scope: token.scope
