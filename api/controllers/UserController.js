@@ -15,7 +15,9 @@ module.exports = {
 			});
 		}
 
-		var username = req.user.login || req.user.username;
+		var username = req.user.login || req.user.username,
+			id = req.user.id;
+
 		var obj = {
 			id: id,
 			username: username,
@@ -240,8 +242,6 @@ module.exports = {
 							obj.banned = false;
 							delete obj.bannedTill;
 						}
-
-						obj.id = result[0].id;
 
 						callback(null, obj);
 					}
