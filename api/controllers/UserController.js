@@ -535,7 +535,6 @@ module.exports = {
 
 						callback(null, obj);
 					}
-					}
 				});
 			},
 			function getBadges(obj, callback) {
