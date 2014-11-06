@@ -289,7 +289,7 @@ module.exports.http = {
 						});
 					},
 					function getUID(token, callback) {
-						gcmainconn.query('SELECT id FROM users WHERE name = ?', [token.login], function (err, result) {
+						maindbconn.query('SELECT id FROM users WHERE name = ?', [token.login], function (err, result) {
 							if (err) return callback(err);
 
 							token.uid = result[0].id;
