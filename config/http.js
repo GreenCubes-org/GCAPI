@@ -280,17 +280,28 @@ module.exports.http = {
 
 								if (result.length !== 0) {
 									token.login = result[0].login;
+
 									callback(null, token);
 								} else {
 									callback('Can\'t find login with this ID!');
 								}
 							});
 						});
+					},
+					function getUID(token, callback) {
+						gcdbconn.query('SELECT id FROM users WHERE name = ?', [token.login], function (err, result) {
+							if (err) return callback(err);
+
+							token.uid = result[0].id;
+
+							callback(null, token);
+						});
 					}
 				], function (err, token) {
 					if (err) return done(err);
 
 					done(null, {
+						id: token.uid,
 						token: token.token,
 						username: token.login,
 						clientId: token.clientId,
