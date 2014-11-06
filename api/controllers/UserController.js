@@ -287,6 +287,7 @@ module.exports = {
 		}
 
 		obj = {
+			id: null,
 			username: null,
 			status: {
 				main: null,
@@ -529,12 +530,16 @@ module.exports = {
 							obj.banned = false;
 							delete obj.bannedTill;
 						}
-						callback(null, obj, result[0].id);
+
+						obj.id = result[0].id;
+
+						callback(null, obj);
+					}
 					}
 				});
 			},
-			function getBadges(obj, uid, callback) {
-				gcmainconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [uid], function (err, result) {
+			function getBadges(obj, callback) {
+				gcmainconn.query('SELECT `badgeId`, `badgeData`, UNIX_TIMESTAMP(`first`) AS `first`, `count` FROM badges WHERE player = ?', [obj.id], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length) {
