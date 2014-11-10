@@ -18,7 +18,7 @@ module.exports = {
 					tag: result[0].tag,
 					title: result[0].title,
 					subtitle: result[0].subtitle,
-					url: 'https://greencubes.org/org/' + result[0].
+					url: 'https://greencubes.org/org/' + result[0].id
 				});
 			} else {
 				res.notFound();
