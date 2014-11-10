@@ -35,6 +35,9 @@ module.exports.routes = {
 	'/user/regions': 'user.regions_list',
 	'/users/:user': 'user.userInfo',
 
+	/* Organization API */
+	'/organizations/:org': 'organization.orgInfo',
+
 	/* GC.Main section */
 	'/main/status': 'main.status',
 	'/main/online': 'main.online',
