@@ -9,7 +9,7 @@ module.exports = {
 			return res.badRequest();
 		}
 
-		orgdbconn.query('SELECT * FROM organizations WHERE id = ? AND hidden = 0 AND deleted = 0', [orgId], function (err, result) {
+		orgdbconn.query('SELECT * FROM organizations WHERE id = ? AND hidden = 0 AND deleted = 0 AND accepted = 1', [orgId], function (err, result) {
 			if (err) return res.serverError(err);
 
 			if (result.length !== 0) {
