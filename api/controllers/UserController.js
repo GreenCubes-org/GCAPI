@@ -43,7 +43,7 @@ module.exports = {
 
 		async.waterfall([
 			function getUser(callback) {
-				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', function (err, result) {
+				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -597,7 +597,6 @@ module.exports = {
 
 		async.waterfall([
 			function getUserLogin(callback) {
-
 				gcdb.user.getByLogin(req.user.username, 'maindb', function (err, uid) {
 					if (err) return callback(err);
 
