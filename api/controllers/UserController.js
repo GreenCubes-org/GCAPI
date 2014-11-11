@@ -15,11 +15,10 @@ module.exports = {
 			});
 		}
 
-		var username = req.user.login || req.user.username,
-			id = req.user.id;
+		var username = req.user.login || req.user.username;
 
 		var obj = {
-			id: id,
+			id: null,
 			username: username,
 			email: null,
 			status: {
@@ -43,7 +42,22 @@ module.exports = {
 		};
 
 		async.waterfall([
+			function getUser(callback) {
+				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', function (err, result) {
+					if (err) return callback(err);
 
+					if (result.length === 0) {
+						res.json(404, {
+							message: 'User not exists',
+							documentation_url: docs_url
+						});
+					} else {
+						obj.id = result[0].id;
+
+						callback(null, obj);
+					}
+				});
+			},
 			function findLastseenMain(callback) {
 				gcdb.user.getLastseen(username, 'gcmaindb', function (err, result) {
 					if (err) return callback(err);
@@ -277,13 +291,24 @@ module.exports = {
 	},
 
 	userInfo: function (req, res) {
-		username = req.params.user.replace(/[^a-zA-Z0-9_-]/g, '');
+		var credentialInt = parseInt(req.param('org'), 10),
+			credential = (credentialInt) ? credentialInt : req.params.user.replace(/[^a-zA-Z0-9_-]/g, ''),
+			query = 'SELECT `id`, `name`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE ';
 
-		if (username !== req.params.user) {
-			res.json(404, {
-				message: 'User not exists',
+		/* We're accepting only numbers */
+		if (credential != req.params.user) {
+			return res.json(404, {
+				message: 'User doesn\'t exists',
 				documentation_url: docs_url
 			});
+		}
+
+		// If number (id)
+		if (!isNaN(credential)) {
+			query += 'id = "' + credential + '"';
+		// If not number => string (login)
+		} else {
+			query += 'name = "' + credential + '"';
 		}
 
 		obj = {
@@ -309,10 +334,11 @@ module.exports = {
 			badges: []
 		};
 
-		async.waterfall([
+		sails.log.verbose('query: ', query);
 
+		async.waterfall([
 			function getUser(callback) {
-				gcdbconn.query('SELECT id, login FROM users WHERE login = ?', [username], function (err, result) {
+				maindbconn.query(query, function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -321,9 +347,11 @@ module.exports = {
 							documentation_url: docs_url
 						});
 					} else {
-						obj.username = result[0].login;
+						obj.id = result[0].id;
+						obj.username = result[0].name;
 						obj.skin_url = 'http://greenusercontent.net/mc/skins/' + obj.username + '.png';
 						obj.cape_url = 'http://greenusercontent.net/mc/capes/' + obj.username + '.png';
+
 						callback(null, obj);
 					}
 				});
@@ -340,11 +368,12 @@ module.exports = {
 				}
 			},
 			function findLastseenMain(obj, callback) {
-				gcdb.user.getLastseen(username, 'gcmaindb', function (err, result) {
+				gcdb.user.getLastseen(obj.username, 'gcmaindb', function (err, result) {
 					if (err) return callback(err);
 
 					if (!result) {
 						obj.status.main = false;
+
 						callback(null, obj);
 					} else {
 						if (!result.exit) {
@@ -356,23 +385,25 @@ module.exports = {
 								}
 
 								obj.lastseen.main = result.time;
+
 								callback(null, obj);
 							});
 						} else {
 							obj.status.main = false;
-
 							obj.lastseen.main = result.time;
+
 							callback(null, obj);
 						}
 					}
 				});
 			},
 			function findLastseenRpg(obj, callback) {
-				gcdb.user.getLastseen(username, 'gcrpgdb', function (err, result) {
+				gcdb.user.getLastseen(obj.username, 'gcrpgdb', function (err, result) {
 					if (err) return callback(err);
 
 					if (!result) {
 						obj.status.rpg = false;
+
 						callback(null, obj);
 					} else {
 						if (!result.exit) {
@@ -396,11 +427,12 @@ module.exports = {
 				});
 			},
 			function findLastseenApo(obj, callback) {
-				gcdb.user.getLastseen(username, 'gcapodb', function (err, result) {
+				gcdb.user.getLastseen(obj.username, 'gcapodb', function (err, result) {
 					if (err) return callback(err);
 
 					if (!result) {
 						obj.status.apocalyptic = false;
+
 						callback(null, obj);
 					} else {
 						if (!result.exit) {
@@ -424,7 +456,7 @@ module.exports = {
 				});
 			},
 			function findRegDate(obj, callback) {
-				gcdbconn.query('SELECT UNIX_TIMESTAMP(reg_date) AS reg_date FROM users WHERE login = ?', [username], function (err, result) {
+				gcdbconn.query('SELECT UNIX_TIMESTAMP(reg_date) AS reg_date FROM users WHERE login = ?', [obj.username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -436,7 +468,7 @@ module.exports = {
 				});
 			},
 			function findPrefixNickColor(obj, callback) {
-				maindbconn.query('SELECT prefix, color FROM users WHERE name = ?', [username], function (err, result) {
+				maindbconn.query('SELECT prefix, color FROM users WHERE name = ?', [obj.username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -514,7 +546,7 @@ module.exports = {
 				callback(null, obj);
 			},
 			function findBanInfo(obj, callback) {
-				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [username], function (err, result) {
+				maindbconn.query('SELECT `id`, `isBanned`, UNIX_TIMESTAMP(`bannedTill`) AS `bannedTill`, UNIX_TIMESTAMP(NOW()) AS `currentTimestamp` FROM users WHERE name = ?', [obj.username], function (err, result) {
 					if (err) return callback(err);
 
 					if (result.length === 0) {
@@ -530,8 +562,6 @@ module.exports = {
 							obj.banned = false;
 							delete obj.bannedTill;
 						}
-
-						obj.id = result[0].id;
 
 						callback(null, obj);
 					}

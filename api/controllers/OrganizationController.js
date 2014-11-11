@@ -2,14 +2,27 @@
 module.exports = {
 
 	orgInfo: function (req, res) {
-		var orgId = parseInt(req.param('org'), 10);
+		var orgInt = parseInt(req.param('org'), 10),
+			org = (orgInt) ? orgInt : req.param('org').replace(/[^a-zA-Z0-9_-]/g, ''),
+			query;
 
 		/* We're accepting only numbers */
-		if (isNaN(orgId)) {
-			return res.badRequest();
+		if (org != req.param('org')) {
+			return res.json(404, {
+				message: 'Organization doesn\'t exists',
+				documentation_url: docs_url
+			});
 		}
 
-		orgdbconn.query('SELECT * FROM organizations WHERE id = ? AND hidden = 0 AND deleted = 0 AND accepted = 1', [orgId], function (err, result) {
+		// If number (id)
+		if (!isNaN(org)) {
+			query = 'id = "' + org + '"';
+		// If not number => string (tag)
+		} else {
+			query = 'tag = "' + org + '"';
+		}
+
+		orgdbconn.query('SELECT * FROM organizations WHERE ' + query + ' AND hidden = 0 AND deleted = 0 AND accepted = 1', function (err, result) {
 			if (err) return res.serverError(err);
 
 			if (result.length !== 0) {
