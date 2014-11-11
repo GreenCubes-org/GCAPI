@@ -58,7 +58,7 @@ module.exports = {
 					}
 				});
 			},
-			function findLastseenMain(callback) {
+			function findLastseenMain(obj, callback) {
 				gcdb.user.getLastseen(username, 'gcmaindb', function (err, result) {
 					if (err) return callback(err);
 
