@@ -25,7 +25,7 @@ module.exports = {
 				});
 			}
 			req.logIn(user, function (err) {
-				if (err) throw err;
+				if (err) return res.serverError(err);
 
 				res.json({
 					message: 'Success',

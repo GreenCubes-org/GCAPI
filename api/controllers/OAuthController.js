@@ -12,7 +12,7 @@ module.exports = {
 
 	listApps: function (req, res) {
 		Client.find().exec(function (err, clients) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			res.json(clients);
 		});
@@ -74,10 +74,10 @@ module.exports = {
 				description: req.body.description,
 				internal: req.body.internal
 			}).exec(function (err, client) {
-				if (err) throw err;
+				if (err) return res.serverError(err);
 
 				gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
-					if (err) throw err;
+					if (err) return res.serverError(err);
 
 					client.owner = login;
 					res.json({
@@ -138,7 +138,7 @@ module.exports = {
 			Client.findOne({
 				id: parseInt(req.params.id, 10)
 			}).exec(function (err, client) {
-				if (err) throw err;
+				if (err) return res.serverError(err);
 
 				client.name = req.body.name;
 				if (!client.clientSecret) {
@@ -154,10 +154,10 @@ module.exports = {
 				client.internal = req.body.internal == 'true';
 
 				client.save(function (err) {
-					if (err) throw err;
+					if (err) return res.serverError(err);
 
 					gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
-						if (err) throw err;
+						if (err) return res.serverError(err);
 
 						client.owner = login;
 						res.json({
@@ -174,7 +174,7 @@ module.exports = {
 		Client.findOne({
 			id: parseInt(req.params.id, 10)
 		}).exec(function (err, client) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			if (!client) {
 				res.json(400, {
@@ -183,7 +183,7 @@ module.exports = {
 				})
 			} else {
 				gcdb.user.getByID(client.owner, 'gcdb', function (err, login) {
-					if (err) throw err;
+					if (err) return res.serverError(err);
 
 					client.owner = login;
 					res.json(client);
@@ -236,7 +236,7 @@ module.exports = {
 				});
 			}
 		], function (err) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			res.json({
 				message: "Success"

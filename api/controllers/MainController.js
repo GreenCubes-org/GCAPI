@@ -40,7 +40,7 @@ module.exports = {
 			}
 		], function (err, obj) {
 			if (err) {
-				if (!err.show) throw err;
+				if (!err.show) return res.serverError(err);
 			}
 
 			res.json(obj);
@@ -51,7 +51,7 @@ module.exports = {
 		var obj = [];
 
 		gcmainconn.query('SELECT login FROM login_log WHERE `exit` IS NULL ORDER BY login ASC', function (err, result) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			if (result.length === 0) {
 				res.json(obj);
@@ -115,7 +115,7 @@ module.exports = {
 				});
 			}
 		], function (err, obj) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			res.json(obj);
 		});
@@ -161,7 +161,7 @@ module.exports = {
 				});
 			}
 		], function (err, obj) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			res.view('namedColors', {
 				obj: obj,
@@ -193,7 +193,7 @@ module.exports = {
 				});
 			}
 		], function (err, obj) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			res.json(obj);
 		});
@@ -368,7 +368,7 @@ module.exports = {
 				});
 			}
 		], function (err, obj) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			delete obj.id;
 

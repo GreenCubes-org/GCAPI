@@ -280,7 +280,7 @@ module.exports = {
 						documentation_url: docs_url
 					});
 				} else {
-					throw err;
+					return res.serverError(err);
 				}
 			}
 
@@ -580,7 +580,7 @@ module.exports = {
 			}
 		], function (err, obj) {
 			if (err) {
-				throw err;
+				return res.serverError(err);
 			}
 
 			res.json(obj);
@@ -645,7 +645,7 @@ module.exports = {
 				}, callback);
 			}
 		], function (err, obj) {
-			if (err) throw err;
+			if (err) return res.serverError(err);
 
 			res.json(obj);
 		});
