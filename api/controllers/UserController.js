@@ -636,10 +636,10 @@ module.exports = {
 			},
 			function getRegionNamesNSerializeRights(regions, callback) {
 				async.map(regions, function (element, callback) {
-					gcmainconn.query('SELECT * FROM regions WHERE `id` = ?', [element.name], function (err, name) {
+					gcmainconn.query('SELECT * FROM regions WHERE `id` = ?', [element.name], function (err, region) {
 						if (err) return callback(err);
 
-						element.name = name[0].name;
+						element.name = region[0].name;
 						element.coordinates = {
 							first: '' + region[0].minx + ' ' + region[0].miny + ' ' + region[0].minz,
 							second: '' + region[0].maxx + ' ' + region[0].maxy + ' ' + region[0].maxz
