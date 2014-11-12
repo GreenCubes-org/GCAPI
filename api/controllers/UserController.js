@@ -591,7 +591,11 @@ module.exports = {
 		/* Array of objects:
 			{
 				name: 'KernCastle',
-				rights: ['build','full']
+				rights: ['build','full'],
+				coordinates: {
+					"first": "-1288 48 -624",
+					"second": "-1202 52 -620"
+				}
 			}
 		*/
 
@@ -632,10 +636,14 @@ module.exports = {
 			},
 			function getRegionNamesNSerializeRights(regions, callback) {
 				async.map(regions, function (element, callback) {
-					gcmainconn.query('SELECT `name` FROM regions WHERE `id` = ?', [element.name], function (err, name) {
+					gcmainconn.query('SELECT * FROM regions WHERE `id` = ?', [element.name], function (err, name) {
 						if (err) return callback(err);
 
 						element.name = name[0].name;
+						element.coordinates = {
+							first: '' + region[0].minx + ' ' + region[0].miny + ' ' + region[0].minz,
+							second: '' + region[0].maxx + ' ' + region[0].maxy + ' ' + region[0].maxz
+						};
 						element.rights = element.rights.map(function (element) {
 							return gcapi.getRightById(element);
 						});
