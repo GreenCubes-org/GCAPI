@@ -71,12 +71,52 @@ module.exports = {
 	},
 
 	economy: function (req, res) {
-		res.redirect('https://greencubes.org/api.php?type=economy');
+		async.waterfall([
+			function getCachedValue(callback) {
+				redis.get('main.economy', function (err, result) {
+					if (err) return callback(err);
+					
+					// 900000 ms = 15 mins
+					if (result && JSON.parse(result)[time] <= 900000) {
+						callback(null, result);
+					} else {
+						callback(null, null);
+					}
+				});
+			},
+			function processValueAndCache(value, callback) {
+				if (value) {
+					value = JSON.parse(value);
+					
+					callback(null, value);
+				} else {
+					gcmainconn.query('SELECT SUM(`buyMoney` + `sellMoney`) AS `dailymoney` FROM `chestshop_logs` WHERE `time` > NOW() - INTERVAL 1 DAY AND `shopOwner` NOT LIKE `customer`', function (err, result) {
+						if (err) return callback(err);
+						
+						result[0].time = Math.floor(Date.now() / 1000);
+						
+						redis.set('main.economy', JSON.stringify(result[0]), function (err) {
+							if (err) return callback(err);
+
+							callback(null, result[0]);
+						});
+					});
+				}
+			}
+		], function (err, result) {
+			if (err) return res.serverError(err);
+			
+			res.json({
+				economy: {
+					dailymoney: result.dailymoney
+				},
+				time: result.ti
+			});
+		});
 	},
 
 	namedColorsJSON: function (req, res) {
 		async.waterfall([
-
 			function getNamedColors(callback) {
 				var query = 'SELECT name, localizedName, h, s, pioneer, UNIX_TIMESTAMP(opened) AS opened, secondPioneer, UNIX_TIMESTAMP(repeated) AS repeated FROM `named_colors`';
 
