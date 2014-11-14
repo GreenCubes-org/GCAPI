@@ -108,7 +108,7 @@ module.exports = {
 				}
 			}
 		], function (err, result) {
-			if (err) return res.serverError(err);
+			if (err) res.json(err);//return res.serverError(err);
 			
 			res.json({
 				economy: {
