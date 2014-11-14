@@ -76,11 +76,15 @@ module.exports = {
 				redis.get('main.economy', function (err, result) {
 					if (err) return callback(err);
 					
-					// 900000 ms = 15 mins
-					if (result && JSON.parse(result)[time] <= 900000) {
-						callback(null, result);
-					} else {
-						callback(null, null);
+					try {
+						// 900000 ms = 15 mins
+						if (result && JSON.parse(result)[time] <= 900000) {
+							callback(null, result);
+						} else {
+							callback(null, null);
+						}
+					} catch (err) {
+						callback(err);
 					}
 				});
 			},
@@ -110,7 +114,7 @@ module.exports = {
 				economy: {
 					dailymoney: result.dailymoney
 				},
-				time: result.ti
+				time: result.time
 			});
 		});
 	},
