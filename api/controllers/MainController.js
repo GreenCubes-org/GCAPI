@@ -77,11 +77,12 @@ module.exports = {
 					if (err) return callback(err);
 					
 					var json,
-						currentTime = Date() / 1000;
+						currentTime = Math.floor(Date.now() / 1000);
 					try {
 						json = JSON.parse(result);
+						
 						// 900000 ms = 15 mins
-						if (result && currentTime - json.time <= 900000) {
+						if (result && (currentTime - json.time) <= 900000) {
 							callback(null, result);
 						} else {
 							callback(null, null);
