@@ -76,14 +76,17 @@ module.exports = {
 				redis.get('main.economy', function (err, result) {
 					if (err) return callback(err);
 					
+					var json;
 					try {
+						json = JSON.parse(result);
 						// 900000 ms = 15 mins
-						if (result && JSON.parse(result)[time] <= 900000) {
+						if (result && json.time <= 900000) {
 							callback(null, result);
 						} else {
 							callback(null, null);
 						}
 					} catch (err) {
+						err.json = json;
 						callback(err);
 					}
 				});
@@ -108,7 +111,7 @@ module.exports = {
 				}
 			}
 		], function (err, result) {
-			if (err) return res.serverError(err);
+			if (err) return res.json(err.json);//res.serverError(err);
 			
 			res.json({
 				economy: {
