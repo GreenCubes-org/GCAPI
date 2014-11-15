@@ -76,11 +76,12 @@ module.exports = {
 				redis.get('main.economy', function (err, result) {
 					if (err) return callback(err);
 					
-					var json;
+					var json,
+						currentTime = Date() / 1000;
 					try {
 						json = JSON.parse(result);
 						// 900000 ms = 15 mins
-						if (result && json.time <= 900000) {
+						if (result && currentTime - json.time <= 900000) {
 							callback(null, result);
 						} else {
 							callback(null, null);
