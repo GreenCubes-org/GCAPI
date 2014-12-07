@@ -257,16 +257,8 @@ module.exports.http = {
 									callback(null, token);
 								});
 							} else {
-								token.token = gcapi.generateUID(256);
-
-								token.save(function (err) {
-									if (err) return callback(err);
-
-									callback(null, token);
-								});
+								callback(null, token);
 							}
-
-
 						});
 					},
 					function removeAuthcode(token, callback) {
