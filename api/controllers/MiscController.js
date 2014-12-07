@@ -11,7 +11,7 @@ var version = require('../../package.json').version,
 module.exports = {
 
 	info: function (req, res) {
-		obj = {
+		var obj = {
 			commit: null,
 			tag: null
 		}
