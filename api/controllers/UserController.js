@@ -311,7 +311,7 @@ module.exports = {
 			query += 'name = "' + credential + '"';
 		}
 
-		obj = {
+		var obj = {
 			id: null,
 			username: null,
 			status: {
