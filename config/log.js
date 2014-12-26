@@ -9,6 +9,8 @@
  * http://sailsjs.org/#documentation
  */
 
+var appConfig = require('./local.js');
+
 module.exports = {
 
   // Valid `level` configs:
@@ -21,7 +23,7 @@ module.exports = {
   // 'verbose': Display calls from `.error()`, `.warn()`, `.debug()`, `.info()` to `.verbose()`
   //
   log: {
-    level: 'silly'
+    level: appConfig.loglevel || 'error'
   }
 
 };
