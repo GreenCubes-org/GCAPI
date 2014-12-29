@@ -305,6 +305,9 @@ module.exports.http = {
 
 
 		app.get('/oauth/authorize', function (req, res, done) {
+
+				res.setHeader("X-Frame-Options", "DENY");
+
 				if (!req.query.client_id) {
 					res.json(400, {
 						error: "client_id is not defined",

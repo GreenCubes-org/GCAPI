@@ -12,6 +12,8 @@ module.exports = {
 	logintpl: function (req, res) {
 		if (req.isAuthenticated()) return res.redirect('/');
 
+		res.setHeader("X-Frame-Options", "DENY");
+
 		res.view('login');
 	},
 
