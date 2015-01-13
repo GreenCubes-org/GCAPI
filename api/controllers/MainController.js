@@ -81,8 +81,8 @@ module.exports = {
 					try {
 						json = JSON.parse(result);
 						
-						// 900000 ms = 15 mins
-						if (result && (currentTime - json.time) <= 900000) {
+						// 900 = 15 mins
+						if (result && (currentTime - json.time) <= 900) {
 							callback(null, result);
 						} else {
 							callback(null, null);
