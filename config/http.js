@@ -219,6 +219,49 @@ module.exports.http = {
 			});
 		}));
 
+		server.grant(oauth2orize.grant.token(function (client, user, ares, done) {
+			async.waterfall([
+				function createOrFindToken(callback) {
+					Token.findOrCreate({
+						userId: user.id,
+						clientId: client.id
+					}).exec(function (err, token) {
+						if (err) return callback(err);
+
+						token.login = user.username;
+
+						if (!token.token) {
+							token.userId = user.id;
+							token.clientId = client.id;
+							token.token = gcapi.generateUID(256);
+							token.scope = ares;
+
+							token.save(function (err) {
+								if (err) return callback(err);
+
+								callback(null, token);
+							});
+						} else {
+							callback(null, token);
+						}
+					});
+				},
+				function getUID(token, callback) {
+					maindbconn.query('SELECT id FROM users WHERE name = ?', [token.login], function (err, result) {
+						if (err) return callback(err);
+
+						token.uid = result[0].id;
+
+						callback(null, token);
+					});
+				}
+			], function (err, token) {
+				if (err) return done(err);
+
+				done(null, token.token);
+			});
+		}));
+
 
 
 		// the token exchange
@@ -302,6 +345,8 @@ module.exports.http = {
 				});
 			});
 		}));
+
+
 
 
 		app.get('/oauth/authorize', function (req, res, done) {

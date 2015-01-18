@@ -14,7 +14,7 @@
     "git-rev": "0.2.x",
     "redis": "0.12.*",
     "ratelimiter": "1.0.1",
-	"oauth2orize": "~0.1.0",
+	"oauth2orize": "~1.0.1",
 	"connect-ensure-login": "~0.1.1",
 	"passport": "~0.2.0",
     "passport-http-bearer": "~1.0.1",
