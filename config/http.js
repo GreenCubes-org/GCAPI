@@ -322,7 +322,7 @@ module.exports.http = {
 					});
 					return;
 				}
-				if (!req.query.response_type || req.query.response_type !== 'code') {
+				if (!req.query.response_type || ['code', 'token'].indexOf(req.query.response_type) === -1) {
 					res.json(400, {
 						error: "Wrong response_type",
 						documentation_url: docs_url
