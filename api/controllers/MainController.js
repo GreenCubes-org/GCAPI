@@ -223,7 +223,7 @@ module.exports = {
 		async.waterfall([
 
 			function getItems(callback) {
-				var query = 'SELECT `id`, `data`, `name`, `image` AS `image_url` FROM `items`';
+				var query = 'SELECT `id`, `data`, `key`, `name`, `image` AS `image_url` FROM `items`';
 
 				maindbconn.query(query, function (err, result) {
 					if (err) return callback(err);
