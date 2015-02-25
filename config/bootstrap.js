@@ -20,25 +20,29 @@ module.exports.bootstrap = function (cb) {
 	global.mysql = require('mysql');
 	global.cfg = require('./local.js');
 
+	/*
+
+	*/
+
 	if (!cfg.userStatusException) {
 		global.cfg.userStatusException = [
-			'Drbadnick',
-			'Xitaly',
-			'Satanuga',
-			'Kunik',
-			'Panty',
-			'nzh',
-			'PoKka',
-			'Imhotep',
-			'MasterToma',
-			'Kernel',
-			'MushroomKiller',
-			'MushrO_om',
-			'tort32',
 			'Rena4ka',
 			'Feyola',
+			'Fluffy',
+			'Xitaly',
+			'MushroomKiller',
+			'MushrO_om',
+			'Kunik',
+			'Kernel',
+			'tort32',
+			'Satanuga',
+			'venus',
 			'MacMax',
-			'venus'
+			'MasterToma',
+			'Djzero',
+			'Nickolay_V',
+			'Baron_Samedi',
+			'OemDef'
 		];
 	}
 
