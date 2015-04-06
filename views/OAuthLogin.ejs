@@ -1,4 +1,4 @@
-<% title = 'Требуется авторизация'
+<% title = 'Требуется вход в аккаунт GreenCubes'
 styles.push('main.css');
 scripts.push('login.js') %>
 
@@ -18,27 +18,25 @@ scripts.push('login.js') %>
 	</head>
 
 	<body>
-		<div class="gc-center">
-			<img class="ui image gc-logo gc-center" src="/images/gclogo.png">
-			<h2>Приложение <%= name %> (<%= description %>) просит доступ <br>
-				к твоему аккаунту на GreenCubes</h2>
-			<form id="loginform" method="post" action="/login">
+		<div class="gc-center" style="margin-top:4rem">
+			<h1 class="dialog-header">Требуется вход в аккаунт GreenCubes</h1>
+			<p class="dialog-descr">Приложение <%= name %> просит доступ <br>
+				к вашему аккаунту</p>
+			<form id="loginform" method="post" action="/login" style="margin-top:1rem">
 				<div class="ui form" style="display: inline-block !important">
 					<div class="field">
-						<div class="ui left labeled icon input">
+						<div class="ui left icon input">
 							<input placeholder="Имя пользователя" type="text" name="username">
 							<i class="user icon"></i>
 						</div>
 					</div>
 					<div class="field">
-						<div class="ui left labeled icon input">
+						<div class="ui left icon input">
 							<input placeholder="Пароль" type="password" name="password">
 							<i class="lock icon"></i>
 						</div>
 					</div>
-					<div class="enterbutton gc-center">
-						<input type="submit" class="enterbutton" title="Войти" value="">
-					</div>
+					<input type="submit" class="ui green button" title="Войти" value="Войти">
 				</div>
 			</form>
 		  <div id="loginerr"></div>

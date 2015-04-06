@@ -449,13 +449,21 @@ module.exports.http = {
 					});
 					return;
 				}
+				var cli = req.oauth2.client;
 
-				res.render('dialog', {
-					transactionID: req.oauth2.transactionID,
-					user: req.user,
-					cli: req.oauth2.client,
-					scopes: scopes
+				gcdb.user.getByID(cli.owner, 'gcdb', function (err, login) {
+					if (err) return res.serverError(err);
+
+					cli.owner = login;
+
+					res.render('dialog', {
+						transactionID: req.oauth2.transactionID,
+						user: req.user,
+						cli: cli,
+						scopes: scopes
+					});
 				});
+
 			});
 
 

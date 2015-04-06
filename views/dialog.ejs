@@ -18,45 +18,46 @@ scripts.push('dialog.js') %>
 	</head>
 
 	<body>
-		<div class="gc-center">
-			<img class="ui image gc-logo gc-center" src="/images/gclogo.png">
-			<h2>Привет, <%= user.username %>! Приложение <b><%= cli.name %></b><br>
-				просит доступа к твоему аккаунту.</h2>
+		<div class="gc-center" style="margin-top:4rem">
+			<h1 class="dialog-header">Требуется авторизация</h1>
+			<h2 style="margin:1rem 0 0.3rem"><%= cli.name %></h2>
+			<i class="linkify big icon dialog-icon"></i>
+			<h2 style="margin:0.3rem 0 1rem"><%= user.username %></h2>
+			<p class="dialog-descr"><b><%= cli.name %></b> от <b><%= cli.owner %></b> просит доступа к вашему аккаунту GreenCubes</p>
 			<form id="oauthform" action="/oauth/authorize/decision" method="post">
 				<input name="transaction_id" type="hidden" value="<%= transactionID %>">
 				<input name="scope" type="hidden" value="<%= cli.scope %>">
 				<div class="field" style="margin: 0 auto;width:90%;">
-					<div class="ui list">
+					<p class="dialog-listheader">Это приложение сможет:</p>
+					<div class="ui list dialog-list">
 					<% if(_.contains(scopes, 'profile') || scopes === '*') { %>
 						<div class="item">
-							<div class="content">
-								<div class="header">Приложение сможет узнать базовую информацию о игроке</div>
-								Последний вход, цвет ника, префикс, скин, статус онлайна.
-							</div>
+							<div class="content"><i class="checkmark icon"></i> видеть публичную информацию об аккаунте</div>
 						</div>
 					<% } %>
 					<% if(_.contains(scopes, 'email') || scopes === '*') { %>
 						<div class="item">
-							<div class="content">
-								<div class="header">Приложение сможет узнать твой email</div>
-								У приложения будет доступ к твоему email, обычно это нужно для почтовых рассылок.
-							</div>
+							<div class="content"><i class="checkmark icon"></i> видеть email</div>
 						</div>
 					<% } %>
 					<% if(_.contains(scopes, 'regions') || scopes === '*') { %>
 						<div class="item">
-							<div class="content">
-								<div class="header">Приложение сможет узнать твой список регионов</div>
-								У приложения будет доступ к твоему списку регионов на Main сервере.
-							</div>
+							<div class="content"><i class="checkmark icon"></i> просматривать ваши игровые регионы</div>
 						</div>
 					<% } %>
 					</div>
+					<p class="dialog-listheader">Не сможет:</p>
+					<div class="ui list dialog-list">
+						<div class="item">
+							<div class="content"><i class="remove icon"></i> видеть пароль</div>
+						</div>
+						<div class="item">
+							<div class="content"><i class="remove icon"></i> управлять вашим аккаунтом</div>
+						</div>
+					</div>
 				</div>
 				<div class="ui form" style="display: inline-block !important; margin-top: 20px;">
-					<div class="allowbutton gc-center">
-						<input type="submit" class="allowbutton" id="allow" value="">
-					</div>
+					<input type="submit" class="ui green button" id="allow" value="Принять">
 				</div>
 			</form>
 			<a id="wtflink" href="/logout">Это не ваш аккаунт?</a>
