@@ -19,7 +19,6 @@ module.exports = {
 
 	login: function (req, res) {
 		passport.authenticate('local', function (err, user, info) {
-			console.log(err, user, info);
 			if ((err) || (!user)) {
 				if (info.message === 'Missing credentials') info.message = 'Введите логин/пароль';
 				return res.json({
