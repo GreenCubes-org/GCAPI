@@ -43,6 +43,7 @@ module.exports.http = {
 				'/',
 				'/rate_limit',
 				'/meta',
+				'/login',
 				'/logout',
 				'/oauth/authorize',
 				'/oauth/authorize/decision',
